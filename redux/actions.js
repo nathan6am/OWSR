@@ -1,0 +1,3 @@
+export const SHOW_SIGNIN = "SHOW_SIGNIN"
+export const SHOW_SIGNUP = "SHOW_SIGNUP"
+export const HIDE_AUTH_MODAL = "HIDE_AUTH_MODAL"
