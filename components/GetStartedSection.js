@@ -43,7 +43,6 @@ export default function GetStartedSection() {
     show: {
       y: 0,
       opacity: 1,
-      fontSize: "50px",
       transition: {
         type: "spring",
         duration: 0.8,
@@ -74,13 +73,9 @@ export default function GetStartedSection() {
       ref={ref}
       className=" w-screen px-3 md:px-5 xl:px-10 py-10 flex flex-col"
     >
-      <motion.div
-        variants={header}
-        animate={animation}
-        className="text-white text-2xl text-center "
-      >
-        <h1>Get Started</h1>
-      </motion.div>
+     
+        <h1 className="text-white text-center ">Get Started</h1>
+  
       <motion.ol
         variants={container}
         animate={animation}
@@ -97,7 +92,7 @@ export default function GetStartedSection() {
             color="#ffffff"
             className="md:hidden absolute ml-3 right-[50%] bottom-[-20px]"
           />
-          <div className="flex flex-col p-5 w-full text-red-500 text-center justify-center items-center cursor-pointer group ">
+          <div className="flex flex-col p-5 w-full text-red-500 text-center justify-center items-center cursor-pointer group">
             <BsFillPersonPlusFill
               size="90px"
               className="group-hover:scale-110 transition-all ease-in-out duration-[500]"
@@ -120,9 +115,12 @@ export default function GetStartedSection() {
             color="#ffffff"
             className="md:hidden absolute ml-3 right-[50%] bottom-[-20px]"
           />
-          <div className="flex flex-col p-5 w-full text-red-500 text-center justify-center items-center ">
-            <FaTrophy size="80px" />
-            <p className="text-white text-left md:mx-5 lg:mx-10 my-3">
+          <div className="flex flex-col p-5 w-full text-red-500 text-center justify-center items-center cursor-pointer group">
+            <FaTrophy
+              size="80px"
+              className="group-hover:scale-110 transition-all ease-in-out duration-[500]"
+            />
+            <p className="text-white text-left md:mx-5 lg:mx-10 my-3 group-hover:text-red-300">
               Explore our weekly races, championship series, specials events,
               hotlap challenges, and more opened-wheeled racing action.
             </p>
@@ -139,18 +137,24 @@ export default function GetStartedSection() {
             color="#ffffff"
             className="md:hidden absolute ml-3 right-[50%] bottom-[-20px]"
           />
-          <div className="flex flex-col p-5 w-full text-red-500 text-center justify-center items-center ">
-            <FaScroll size="80px" />
-            <p className="text-white text-left md:mx-5 lg:mx-10 my-3">
+          <div className="flex flex-col p-5 w-full text-red-500 text-center justify-center items-center cursor-pointer group">
+            <FaScroll
+              size="80px"
+              className="group-hover:scale-110 transition-all ease-in-out duration-[500]"
+            />
+            <p className="text-white text-left md:mx-5 lg:mx-10 my-3 group-hover:text-red-300">
               Take a look at our rules and FAQs. OWSR's rules and moderation aim
               to provide competetive, clean, and fair racing
             </p>
           </div>
         </motion.li>
         <motion.li variants={child} className="flex-1 my-5">
-          <div className="flex flex-col p-5 w-full text-red-500 text-center justify-center items-center ">
-            <GiSteeringWheel size="80px" />
-            <p className="text-white text-left md:mx-5 lg:mx-10 my-3">
+          <div className="flex flex-col p-5 w-full text-red-500 text-center justify-center items-center cursor-pointer group">
+            <GiSteeringWheel
+              size="80px"
+              className="group-hover:scale-110 transition-all ease-in-out duration-[500]"
+            />
+            <p className="text-white text-left md:mx-5 lg:mx-10 my-3 group-hover:text-red-300">
               Take a look at our rules and FAQs. OWSR's rules and moderation aim
               to provide competetive, clean, and fair racing
             </p>

@@ -2,31 +2,34 @@
   {
     "featured": true,
     "type": "special",
+    "series": "OWSR Special Event",
     "title": "Miami Grand Prix",
     "description": "RSS FH22 @ Miami International Autodrome",
     "track": "Miami International Autodrome",
-    "date": "2022-06-05T09:00:00.000Z",
+    "date": "2022-06-05T21:00:00.000Z",
     "game": "asseto-corsa",
     "image": "/images/miamigp.jpg"
   },
   {
     "featured": true,
-    "type": "weekly",
+    "type": "championship",
+    "series": "Formula Abarth Championship Series",
     "title": "FA01 @ Laguna Seca",
     "description": "Tatuus FA01 @ Weathertech Raceway",
     "track": "Laguna Seca International",
-    "date": "2022-06-04T09:00:00.000Z",
+    "date": "2022-06-04T21:00:00.000Z",
     "game": "asseto-corsa",
     "image": "/images/fa01.jpg"
   },
   {
     "featured": true,
     "type": "weekly",
-    "title": "FA01 @ Laguna Seca",
-    "description": "RSS FH22 @ Miami International Autodrome",
+    "series": "OWSR Weekly Race",
+    "title": "F2004 @ Spa",
+    "description": "Ferrari F2004 @ Circuit de Spa Francorchamps",
     "track": "Laguna Seca International",
-    "date": "2022-06-05T09:00:00.000Z",
+    "date": "2022-06-05T21:00:00.000Z",
     "game": "asseto-corsa",
-    "image": "/images/fa01.jpg"
+    "image": "/images/ferrari.jpg"
   }
 ]

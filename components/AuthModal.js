@@ -44,7 +44,9 @@ export default function AuthModal() {
           dispatch(hideAuthModal());
         }}
       />
+      <div className="flex w-full flex-col min-w-[280px] md:min-w-[400px] lg:min-w-[500px] p-5 md:px-10 lg:px-[6rem] py-5 ">
       <Content page={page} />
+      </div>
     </Modal>
   );
 }
@@ -62,7 +64,7 @@ function SignInContent() {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   return (
-    <div className="flex w-full flex-col min-w-[280px] md:min-w-[400px] lg:min-w-[500px] p-5 md:px-10 lg:px-[6rem] py-5 ">
+    <>
       <img
         className="mx-auto my-4 sm:my-8"
         src="/images/logo.png"
@@ -146,14 +148,14 @@ function SignInContent() {
       >
         SIGN UP NOW
       </a>
-    </div>
+    </>
   );
 }
 
 function SignUpContent() {
   const dispatch = useDispatch();
   return (
-    <div className="flex w-full flex-col min-w-[280px] md:min-w-[400px] lg:min-w-[500px] p-5 md:px-10 lg:px-[6rem] py-5 ">
+    <>
       <img
         className="mx-auto my-4 sm:my-8"
         src="/images/logo.png"
@@ -174,7 +176,7 @@ function SignUpContent() {
           <div className="flex flex-col justify-center items-center">
             <label
               htmlFor="email"
-              className="text-red-700 align-left text-left w-full mb-1"
+              className="input-label"
             >
               Email:
             </label>
@@ -188,7 +190,7 @@ function SignUpContent() {
 
             <label
               htmlFor="password"
-              className="text-red-700 align-left text-left w-full  mb-1"
+              className="input-label"
             >
               Password:
             </label>
@@ -201,7 +203,7 @@ function SignUpContent() {
             />
             <label
               htmlFor="confirmPassword"
-              className="text-red-700 align-left text-left w-full  mb-1"
+              className="input-label"
             >
               Confirm Password:
             </label>
@@ -243,6 +245,6 @@ function SignUpContent() {
       >
         SIGN IN
       </a>
-    </div>
+    </>
   );
 }

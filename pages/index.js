@@ -1,6 +1,6 @@
 import Head from "next/head";
 import Image from "next/image";
-import Layout from "../components/Layout";
+
 import { FaDiscord, FaYoutube, FaTwitch, FaFacebook } from "react-icons/fa";
 import { useDispatch } from "react-redux";
 import { showAuthModal } from "../redux/actioncreators";
@@ -8,12 +8,15 @@ import GetStartedSection from "../components/GetStartedSection";
 import EventsCarousel from "../components/EventsCarousel";
 export default function Home({ events }) {
   return (
-    <div className="w-full flex flex-col bg-dark-200 ">
+    <div className="w-full flex flex-col bg-fixed bg-cover" style={{backgroundImage:"url(/images/bg.jpg)"}}>
       <Hero />
-      <section className="flex ">
+      <section className="flex bg-dark-200">
         <GetStartedSection />
       </section>
-      <section className="bg-dark-300 flex ">
+      <section className="flex flex-col bg-transparent w-full h-[500px]">
+        <h1 className="text-center">About</h1>
+      </section>
+      <section className="bg-dark-300 flex">
         <EventsCarousel events={events} />
       </section>
     </div>
