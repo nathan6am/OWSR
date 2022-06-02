@@ -1,5 +1,7 @@
 import Head from "next/head";
 import Image from "next/image";
+import dbConnect from "../lib/dbConnect";
+import Event from "../lib/models/Event";
 
 import { FaDiscord, FaYoutube, FaTwitch, FaFacebook } from "react-icons/fa";
 import { useDispatch } from "react-redux";
@@ -8,7 +10,10 @@ import GetStartedSection from "../components/GetStartedSection";
 import EventsCarousel from "../components/EventsCarousel";
 export default function Home({ events }) {
   return (
-    <div className="w-full flex flex-col bg-fixed bg-cover" style={{backgroundImage:"url(/images/bg.jpg)"}}>
+    <div
+      className="w-full flex flex-col bg-fixed bg-cover"
+      style={{ backgroundImage: "url(/images/bg.jpg)" }}
+    >
       <Hero />
       <section className="flex bg-dark-200">
         <GetStartedSection />
@@ -85,9 +90,18 @@ function Hero() {
 }
 
 export async function getServerSideProps() {
+  await dbConnect();
   // Fetch data from external API
-  const events = require("../sampleData/events.json");
+  try {
+    const events = await Event.find().lean();
+    if (events) {
+      return { props: { events: JSON.parse(JSON.stringify(events)) } };
+    } else {
+      return { props: { events: [] } };
+    }
+  } catch (error) {
+    throw new Error(error.message);
+  }
 
   // Pass data to the page via props
-  return { props: { events } };
 }

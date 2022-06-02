@@ -45,7 +45,7 @@ export default function AuthModal() {
         }}
       />
       <div className="flex w-full flex-col min-w-[280px] md:min-w-[400px] lg:min-w-[500px] p-5 md:px-10 lg:px-[6rem] py-5 ">
-      <Content page={page} />
+        <Content page={page} />
       </div>
     </Modal>
   );
@@ -110,7 +110,7 @@ function SignInContent() {
               id="password"
               name="password"
               type="password"
-              placeholder="**********"
+              placeholder="●●●●●●●●●"
               className="input-field"
             />
             <button className=" px-5 w-[50%] py-2 my-3 mx-3 text-white bg-red-700 flex justify-center  items-center hover:bg-red-500/[0.8] rounded-md">
@@ -174,10 +174,7 @@ function SignUpContent() {
       >
         <Form>
           <div className="flex flex-col justify-center items-center">
-            <label
-              htmlFor="email"
-              className="input-label"
-            >
+            <label htmlFor="email" className="input-label">
               Email:
             </label>
             <Field
@@ -188,30 +185,24 @@ function SignUpContent() {
               className="input-field"
             />
 
-            <label
-              htmlFor="password"
-              className="input-label"
-            >
+            <label htmlFor="password" className="input-label">
               Password:
             </label>
             <Field
               id="password"
               name="password"
               type="password"
-              placeholder="**********"
+              placeholder="●●●●●●●●●"
               className="input-field"
             />
-            <label
-              htmlFor="confirmPassword"
-              className="input-label"
-            >
+            <label htmlFor="confirmPassword" className="input-label">
               Confirm Password:
             </label>
             <Field
               id="confirmPassword"
               name="confirmPassword"
               type="confirmPassword"
-              placeholder="**********"
+              placeholder="●●●●●●●●●"
               className="input-field"
             />
             <button className="py-3 px-5 w-[50%] my-3 mx-3 text-white bg-red-700 hover:bg-red-500/[0.8] rounded-md">

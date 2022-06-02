@@ -60,17 +60,20 @@ export default function EventsCarousel({ events }) {
     },
   };
   return (
-    <div  className="container py-10">
-      
-        <h1 className="text-center">Events</h1>
-     
+    <div className="container py-10">
+      <h1 className="text-center">Events</h1>
+
       <div ref={ref} className="flex flex-col justify-center items-center">
-        <motion.ol variants={container} animate={animation} className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-10 w-full pt-10 ">
-          {events.map((event, idx) => {
+        <motion.ol
+          variants={container}
+          animate={animation}
+          className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-10 w-full pt-10 "
+        >
+          {events.slice(0, 3).map((event, idx) => {
             return (
               <motion.li
                 key={idx}
-                id={idx + 1}
+                id={event._id}
                 variants={child}
                 className="flex"
               >

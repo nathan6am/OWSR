@@ -12,13 +12,12 @@
     @apply p-3 px-4 focus:outline-none focus:ring-2 focus:ring-white/[0.6] bg-dark-200 rounded-md mx-3 mb-3 w-[100%] text-white/[0.8];
   }
   .input-label {
-    @apply text-red-700 text-left w-full mb-1
+    @apply text-red-700 text-left w-full mb-1;
   }
   .btn-social {
     @apply py-3 px-5 w-[100%] items-center my-3 mx-3 justify-center text-center text-white rounded-md flex flex-row;
   }
 }
-
 
 :root {
   scrollbar-color: #b40016 #2e3645 !important;
@@ -35,6 +34,9 @@ body {
   padding: 0;
   margin: 0;
   font-family: "Roboto", sans-serif;
+  font-weight: 400;
+
+  font-style: normal;
 }
 h1 {
   font-family: "kallisto", sans-serif;
