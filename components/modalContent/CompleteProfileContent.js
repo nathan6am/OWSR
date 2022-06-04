@@ -6,51 +6,76 @@ import { useRouter } from "next/router";
 import { FaDiscord, FaSteam } from "react-icons/fa";
 import { fetcher } from "../../lib/fetcher";
 import { useCurrentUser } from "../../hooks/useCurrentUser";
-import { showSignIn, showCompleteProfile } from "../../lib/util/navigateModal";
+import { showSignIn } from "../../lib/util/navigateModal";
 
-export default function SignUpContent() {
-  const { data: { user } = {}, mutate, isValidating } = useCurrentUser();
-  const router = useRouter();
-  useEffect(() => {
-    if (isValidating) return;
-    if (user && !user.registered) {
-      showCompleteProfile(router);
-    } else if (user && user.registered && !user.linked) {
-      console.log("show link steam");
-    } else if (user && user.registered && user.linked) {
-      router.replace("/dashboard");
-    }
-  }, [user, router, isValidating]);
-  const [loading, setLoading] = useState(false);
-  const [loginFailed, setLoginFailed] = useState(false);
-  const onSubmit = useCallback(
-    async (values) => {
-      setLoading(true);
-      try {
-        const response = await fetcher("/api/auth/signup", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            email: values.email,
-            password: values.password,
-          }),
-        });
-        if (!response.user) {
-          setLoginFailed(true);
-        } else {
-          setLoginFailed(false);
-          mutate({ user: response.user }, false);
-          showCompleteProfile(router);
-        }
-      } catch (e) {
-        console.log(e.message);
-        setLoginFailed(true);
-      } finally {
-        setLoading(false);
-      }
-    },
-    [mutate]
+export default function CompleteProfileContent() {
+  const [countryCode, setCountryCode] = useState("");
+
+  return (
+    <>
+      <img
+        className="mx-auto my-4 sm:my-8"
+        src="/images/logo.png"
+        width={200}
+      ></img>
+      <h1 className="text-red-700 text-center text-xl mb-3">
+        Complete Your Profile
+      </h1>
+      <Formik
+        initialValues={{
+          email: "",
+          password: "",
+        }}
+        onSubmit={async (values) => {
+          await new Promise((r) => setTimeout(r, 500));
+          alert(JSON.stringify(values, null, 2));
+        }}
+      >
+        <Form>
+          <div className="flex flex-col justify-center items-center">
+            <label htmlFor="name" className="input-label">
+              Full Name:
+            </label>
+            <Field
+              id="name"
+              name="name"
+              placeholder="Enter your full name"
+              type="text"
+              className="input-field"
+            />
+            <label htmlFor="password" className="input-label">
+              Country
+            </label>
+            <Field
+              id="country"
+              name="country"
+              placeholder="Country"
+              type="text"
+              className="input-field"
+            />
+            <button className="py-3 px-5 w-[50%] my-3 mx-3 text-white bg-red-700 hover:bg-red-500/[0.8] rounded-md">
+              Continue
+            </button>
+          </div>
+        </Form>
+      </Formik>
+      {/* <p className="text-center text-red-700 mt-6 mb-1">
+        Already have an account?{" "}
+      </p>
+      <a
+        onClick={() => {
+          showSignIn(router);
+        }}
+        className="text-white hover:text-red-600 hover:underline cursor-pointer text-center text-lg "
+      >
+        SIGN IN
+      </a> */}
+    </>
   );
+}
+
+function LinkSteamContent() {
+  const dispatch = useDispatch();
   return (
     <>
       <img
@@ -63,9 +88,11 @@ export default function SignUpContent() {
         initialValues={{
           email: "",
           password: "",
-          confirmPassword: "",
         }}
-        onSubmit={onSubmit}
+        onSubmit={async (values) => {
+          await new Promise((r) => setTimeout(r, 500));
+          alert(JSON.stringify(values, null, 2));
+        }}
       >
         <Form>
           <div className="flex flex-col justify-center items-center">
@@ -100,15 +127,8 @@ export default function SignUpContent() {
               placeholder="●●●●●●●●●"
               className="input-field"
             />
-            <button
-              type="submit"
-              className=" px-5 w-[50%] py-2 my-3 mx-3 text-white bg-red-700 flex justify-center  items-center hover:bg-red-500/[0.8] rounded-md"
-            >
-              {!loading ? (
-                <div className="text-center my-1">Continue</div>
-              ) : (
-                <ClipLoader color="white" size="32px" />
-              )}
+            <button className="py-3 px-5 w-[50%] my-3 mx-3 text-white bg-red-700 hover:bg-red-500/[0.8] rounded-md">
+              Continue
             </button>
           </div>
         </Form>
@@ -126,12 +146,6 @@ export default function SignUpContent() {
           <button className="btn-social bg-white/[0.2] hover:bg-white/[0.3]">
             <FaSteam size="20px" className="mr-2" />
             Sign Up With Steam
-          </button>
-        </Link>
-        <Link href="/api/auth/connect/steam">
-          <button className="btn-social bg-white/[0.2] hover:bg-white/[0.3]">
-            <FaSteam size="20px" className="mr-2" />
-            Connect With Steam
           </button>
         </Link>
       </div>

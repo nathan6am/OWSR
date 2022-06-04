@@ -19,9 +19,7 @@ handler.post(...auths, async (req, res) => {
 
   const user = {
     email: email,
-    name: name,
     hashedPassword: hashedPassword,
-    country: country,
   };
   const newUser = await User.create(user);
   user._id = newUser._id;
@@ -29,7 +27,7 @@ handler.post(...auths, async (req, res) => {
     if (err) throw err;
     // when we finally log in, return the (filtered) user object
     res.status(201).json({
-      user: { _id: newUser._id, name: newUser._name, incomplete: ["steam"] },
+      user: "hi",
     });
   });
 });

@@ -1,10 +1,15 @@
-import React from "react";
+import React, { useCallback, useEffect } from "react";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { BsFillCalendar2WeekFill } from "react-icons/bs";
 import { FaFlagCheckered, FaTrophy } from "react-icons/fa";
 import { MdNotifications } from "react-icons/md";
 import Helmet from "../public/icons/helmet.svg";
-export default function Sidebar() {
+
+import { useRouter } from "next/router";
+
+export default function Sidebar({ user, signOut }) {
+  const router = useRouter();
+
   return (
     <div className="min-h-screen w-[320px] bg-dark-300 flex flex-col h-full">
       <nav className="flex flex-col">
@@ -46,8 +51,9 @@ export default function Sidebar() {
         </ul>
       </nav>
       <div className="justify-self-end py-10 px-8">
-        <p>hello</p>
+        <p>{`Hi: ${user._id}`}</p>
       </div>
+      <button onClick={signOut}>Sign Out</button>
     </div>
   );
 }

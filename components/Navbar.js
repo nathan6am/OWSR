@@ -3,12 +3,11 @@ import Link from "next/link";
 import { FaDiscord, FaYoutube, FaTwitch, FaFacebook } from "react-icons/fa";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { useRouter } from "next/router";
-import { useDispatch } from "react-redux";
 import { showSignIn } from "../lib/util/navigateModal";
+
+//TODO: Responsive menu
 export default function Navbar() {
   const [navScroll, setNavScroll] = useState(false);
-
-  const dispatch = useDispatch();
   const navRef = useRef();
   navRef.current = navScroll;
   useEffect(() => {
@@ -30,6 +29,7 @@ export default function Navbar() {
   }, []);
   const [navbarOpen, setNavbarOpen] = React.useState(false);
   const router = useRouter();
+
   return (
     <>
       <nav
