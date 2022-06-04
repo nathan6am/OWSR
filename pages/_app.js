@@ -5,21 +5,18 @@ import store from "../redux/store";
 import AuthModal from "../components/AuthModal";
 import NextNProgress from "nextjs-progressbar";
 import DashboardLayout from "../components/layouts/DashboardLayout";
-
-const layouts={
+import { useCurrentUser } from "../hooks/useCurrentUser";
+const layouts = {
   Public: PublicLayout,
-  Dashboard: DashboardLayout
-}
+  Dashboard: DashboardLayout,
+};
 function MyApp({ Component, pageProps }) {
   const Layout = layouts[Component.layout] || PublicLayout;
   return (
     <Provider store={store}>
       <Layout>
-        
-        <AuthModal />
-        <NextNProgress color="#B91C1C"/>
+        <AuthModal ariaHideApp={false} />
         <Component {...pageProps} />
-      
       </Layout>
     </Provider>
   );

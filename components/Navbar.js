@@ -4,9 +4,10 @@ import { FaDiscord, FaYoutube, FaTwitch, FaFacebook } from "react-icons/fa";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
-import { showAuthModal } from "../redux/actioncreators";
+import { showSignIn } from "../lib/util/navigateModal";
 export default function Navbar() {
   const [navScroll, setNavScroll] = useState(false);
+
   const dispatch = useDispatch();
   const navRef = useRef();
   navRef.current = navScroll;
@@ -116,7 +117,7 @@ export default function Navbar() {
               <button
                 className="text-red-700 px-4 py-3 uppercase rounded-md border border-red-700 hover:border-red-700 hover:text-white hover:bg-red-500/[0.5]"
                 onClick={() => {
-                  dispatch(showAuthModal("sign-in"));
+                  showSignIn(router);
                 }}
               >
                 Sign In

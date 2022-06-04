@@ -9,6 +9,10 @@ export const showAuthModal= (page) => {
             return {
                 type: actions.SHOW_SIGNUP
             }
+        case "complete-profile":
+            return {
+                type: actions.SHOW_COMPLETE_PROFILE
+            }
         default:
             return {
                 type:actions.SHOW_SIGNIN

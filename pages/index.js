@@ -2,19 +2,28 @@ import Head from "next/head";
 import Image from "next/image";
 import dbConnect from "../lib/dbConnect";
 import Event from "../lib/models/Event";
-
+import { useRouter } from "next/router";
+import React, {useState, useEffect} from "react"
 import { FaDiscord, FaYoutube, FaTwitch, FaFacebook } from "react-icons/fa";
 import { useDispatch } from "react-redux";
 import { showAuthModal } from "../redux/actioncreators";
 import GetStartedSection from "../components/GetStartedSection";
 import EventsCarousel from "../components/EventsCarousel";
 export default function Home({ events }) {
+  const router = useRouter();
+  const ready = router.ready
+  useEffect(()=>{
+    if (ready) {
+      console.log(router.query)
+    }
+  },[ready])
   return (
     <div
       className="w-full flex flex-col bg-fixed bg-cover"
       style={{ backgroundImage: "url(/images/bg.jpg)" }}
     >
       <Hero />
+      <button onClick={()=>{console.log(router.query)}}>naerferf</button>
       <section className="flex bg-dark-200">
         <GetStartedSection />
       </section>
