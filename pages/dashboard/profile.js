@@ -1,20 +1,17 @@
 import React, { useEffect } from "react";
-import { useCurrentUser } from "../../hooks/useCurrentUser";
+import { useProfile } from "hooks/useProfile";
 import { useRouter } from "next/router";
-import Loading from "../../components/Loading";
 
 export default function Dashboard() {
-  const { data, error, mutate } = useCurrentUser();
+  const { data, error, mutate } = useProfile();
   const router = useRouter();
   useEffect(() => {
     if (!data && !error) return;
     if (!data.user) {
       router.replace("/?auth=sign-in");
-    } else {
-      router.replace("/dashboard/profile");
     }
   }, [router, data, error]);
-  return <Loading />;
+  return <div>{JSON.stringify(data?.user)}</div>;
 }
 
 Dashboard.layout = "Dashboard";

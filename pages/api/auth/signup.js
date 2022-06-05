@@ -1,34 +1,35 @@
 import nc from "next-connect";
-import dbConnect from "../../../lib/dbConnect";
-import User from "../../../lib/models/User";
+
+import User from "@/lib/models/User";
 import bcrypt from "bcrypt";
-import auths from "../../../lib/middlewares/auths";
+import auths from "@/lib/middlewares/auths";
+import filterUser from "@/lib/util/filterUser";
+import * as db from "@/lib/db/dbFunctions";
+
 const handler = nc();
 
 handler.post(...auths, async (req, res) => {
-  await dbConnect();
-  const { name, password, email, country } = req.body;
+  const { password, email } = req.body;
 
-  const userExists = await User.exists({ email: email });
-  if (userExists) {
-    res.status(403).send("The email has already been used.");
-    return;
+  try {
+    const user = await db.newUserWithCredentials(email, password);
+    if (!user) {
+      res
+        .status(403)
+        .json({ error: { message: "Email address already in use" } });
+      return;
+    } else {
+      req.logIn(user, (err) => {
+        if (err) throw err;
+        res.status(201).json({
+          user: user,
+        });
+      });
+    }
+  } catch (e) {
+    console.error(e.message);
+    res.status(500).json({ error: { message: "Something went wrong" } });
   }
-
-  const hashedPassword = await bcrypt.hash(password, 10);
-
-  const user = {
-    email: email,
-    hashedPassword: hashedPassword,
-  };
-  const newUser = await User.create(user);
-  user._id = newUser._id;
-  req.logIn(user, (err) => {
-    if (err) throw err;
-    // when we finally log in, return the (filtered) user object
-    res.status(201).json({
-      user: "hi",
-    });
-  });
 });
+
 export default handler;

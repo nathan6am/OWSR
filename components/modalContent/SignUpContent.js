@@ -4,11 +4,12 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import { ClipLoader } from "react-spinners";
 import { useRouter } from "next/router";
 import { FaDiscord, FaSteam } from "react-icons/fa";
-import { fetcher } from "../../lib/fetcher";
-import { useCurrentUser } from "../../hooks/useCurrentUser";
-import { showSignIn, showCompleteProfile } from "../../lib/util/navigateModal";
+import { fetcher } from "@/lib/fetcher";
+import { useCurrentUser } from "@/hooks/useCurrentUser";
+import { showSignIn, showCompleteProfile } from "@/lib/util/navigateModal";
 
 export default function SignUpContent() {
+  // Handle Redirects if user profile is incomplete or user is already logged in
   const { data: { user } = {}, mutate, isValidating } = useCurrentUser();
   const router = useRouter();
   useEffect(() => {
@@ -22,7 +23,9 @@ export default function SignUpContent() {
     }
   }, [user, router, isValidating]);
   const [loading, setLoading] = useState(false);
-  const [loginFailed, setLoginFailed] = useState(false);
+
+  const [signUpFailed, setSignUpFailed] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
   const onSubmit = useCallback(
     async (values) => {
       setLoading(true);
@@ -36,15 +39,18 @@ export default function SignUpContent() {
           }),
         });
         if (!response.user) {
-          setLoginFailed(true);
+          setSignUpFailed(true);
+          console.log(typeof response.error);
+          setErrorMessage(JSON.stringify(response.error.message));
         } else {
-          setLoginFailed(false);
+          setSignUpFailed(false);
           mutate({ user: response.user }, false);
           showCompleteProfile(router);
         }
       } catch (e) {
+        setErrorMessage(e.message);
         console.log(e.message);
-        setLoginFailed(true);
+        setSignUpFailed(true);
       } finally {
         setLoading(false);
       }
@@ -87,7 +93,7 @@ export default function SignUpContent() {
               id="password"
               name="password"
               type="password"
-              placeholder="●●●●●●●●●"
+              placeholder="Choose a password"
               className="input-field"
             />
             <label htmlFor="confirmPassword" className="input-label">
@@ -97,9 +103,12 @@ export default function SignUpContent() {
               id="confirmPassword"
               name="confirmPassword"
               type="confirmPassword"
-              placeholder="●●●●●●●●●"
+              placeholder="Re-enter password"
               className="input-field"
             />
+            <p className="text-red-700 w-full text-left font-bold">
+              * {errorMessage}
+            </p>
             <button
               type="submit"
               className=" px-5 w-[50%] py-2 my-3 mx-3 text-white bg-red-700 flex justify-center  items-center hover:bg-red-500/[0.8] rounded-md"
@@ -126,12 +135,6 @@ export default function SignUpContent() {
           <button className="btn-social bg-white/[0.2] hover:bg-white/[0.3]">
             <FaSteam size="20px" className="mr-2" />
             Sign Up With Steam
-          </button>
-        </Link>
-        <Link href="/api/auth/connect/steam">
-          <button className="btn-social bg-white/[0.2] hover:bg-white/[0.3]">
-            <FaSteam size="20px" className="mr-2" />
-            Connect With Steam
           </button>
         </Link>
       </div>

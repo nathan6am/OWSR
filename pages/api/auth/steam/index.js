@@ -1,17 +1,16 @@
-import passport from "../../../lib/auth/passport";
+import auths from "@/lib/middlewares/auths";
+import passport from "@/lib/auth/passport";
 import nc from "next-connect";
-import auths from "../../../lib/middlewares/auths";
 
-const path = "/api/auth/steam-callback";
 const handler = nc();
-
 handler
   .use(
     ...auths,
     passport.authenticate("steam", { failureRedirect: "/?auth=sign-in" })
   )
-  .get(path, (req, res) => {
+  .get((req, res) => {
     console.log(req.user);
-    return res.redirect("/dashboard");
+    res.redirect("/");
   });
+
 export default handler;

@@ -1,29 +1,27 @@
 import Head from "next/head";
 import Image from "next/image";
-import dbConnect from "../lib/dbConnect";
+import dbConnect from "../lib/db/dbConnect";
 import Event from "../lib/models/Event";
 import { useRouter } from "next/router";
-import React, {useState, useEffect} from "react"
+import React, { useState, useEffect } from "react";
 import { FaDiscord, FaYoutube, FaTwitch, FaFacebook } from "react-icons/fa";
-import { useDispatch } from "react-redux";
-import { showAuthModal } from "../redux/actioncreators";
 import GetStartedSection from "../components/GetStartedSection";
 import EventsCarousel from "../components/EventsCarousel";
+import { showSignIn, showSignUp } from "../lib/util/navigateModal";
 export default function Home({ events }) {
   const router = useRouter();
-  const ready = router.ready
-  useEffect(()=>{
+  const ready = router.ready;
+  useEffect(() => {
     if (ready) {
-      console.log(router.query)
+      console.log(router.query);
     }
-  },[ready])
+  }, [ready]);
   return (
     <div
       className="w-full flex flex-col bg-fixed bg-cover"
       style={{ backgroundImage: "url(/images/bg.jpg)" }}
     >
       <Hero />
-      <button onClick={()=>{console.log(router.query)}}>naerferf</button>
       <section className="flex bg-dark-200">
         <GetStartedSection />
       </section>
@@ -38,13 +36,6 @@ export default function Home({ events }) {
 }
 
 function Hero() {
-  const dispatch = useDispatch();
-  function showSignIn() {
-    dispatch(showAuthModal("sign-in"));
-  }
-  function showSignUp() {
-    dispatch(showAuthModal("sign-up"));
-  }
   return (
     <div
       className="w-full flex justify-center min-h-screen items-around relative "
@@ -68,7 +59,9 @@ function Hero() {
         </p>
         <div className="flex flex-col justify-center my-5">
           <button
-            onClick={showSignUp}
+            onClick={() => {
+              showSignUp(router);
+            }}
             className="md:px-5 px-4 md:py-4 py-3 text-lg flex flex-row items-center justify-center text-white text-center my-3 bg-red-700 hover:bg-red-500 rounded-md "
           >
             Go Racing!

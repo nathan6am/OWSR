@@ -4,12 +4,47 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import { ClipLoader } from "react-spinners";
 import { useRouter } from "next/router";
 import { FaDiscord, FaSteam } from "react-icons/fa";
-import { fetcher } from "../../lib/fetcher";
-import { useCurrentUser } from "../../hooks/useCurrentUser";
-import { showSignIn } from "../../lib/util/navigateModal";
+import { fetcher } from "@/lib/fetcher";
+import { useCurrentUser } from "@/hooks/useCurrentUser";
+import { showSignIn, showLinkSteam } from "@/lib/util/navigateModal";
 
 export default function CompleteProfileContent() {
+  const { data: { user } = {}, mutate, isValidating } = useCurrentUser();
   const [countryCode, setCountryCode] = useState("");
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
+  const onSubmit = useCallback(
+    async (values) => {
+      setLoading(true);
+      console.log(values);
+      try {
+        const response = await fetcher("/api/users/me", {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            name: values.name,
+            country: values.country,
+          }),
+        });
+        console.log(response);
+        if (!response.user) {
+          console.log("no user in response");
+        } else {
+          mutate({ user: response.user }, false);
+          if (response.user.registered && response.user.linked) {
+            router.replace("/dashboard");
+          } else {
+            showLinkSteam(router);
+          }
+        }
+      } catch (e) {
+        console.log(e.message);
+      } finally {
+        setLoading(false);
+      }
+    },
+    [mutate]
+  );
 
   return (
     <>
@@ -23,13 +58,10 @@ export default function CompleteProfileContent() {
       </h1>
       <Formik
         initialValues={{
-          email: "",
-          password: "",
+          name: "",
+          country: "",
         }}
-        onSubmit={async (values) => {
-          await new Promise((r) => setTimeout(r, 500));
-          alert(JSON.stringify(values, null, 2));
-        }}
+        onSubmit={onSubmit}
       >
         <Form>
           <div className="flex flex-col justify-center items-center">
@@ -53,8 +85,15 @@ export default function CompleteProfileContent() {
               type="text"
               className="input-field"
             />
-            <button className="py-3 px-5 w-[50%] my-3 mx-3 text-white bg-red-700 hover:bg-red-500/[0.8] rounded-md">
-              Continue
+            <button
+              type="submit"
+              className=" px-5 w-[50%] py-2 my-3 mx-3 text-white bg-red-700 flex justify-center  items-center hover:bg-red-500/[0.8] rounded-md"
+            >
+              {!loading ? (
+                <div className="text-center my-1">Continue</div>
+              ) : (
+                <ClipLoader color="white" size="32px" />
+              )}
             </button>
           </div>
         </Form>

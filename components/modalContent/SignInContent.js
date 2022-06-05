@@ -4,15 +4,26 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import { ClipLoader } from "react-spinners";
 import { useRouter } from "next/router";
 import { FaDiscord, FaSteam } from "react-icons/fa";
-import { fetcher } from "../../lib/fetcher";
-import { useCurrentUser } from "../../hooks/useCurrentUser";
-import { showSignUp } from "../../lib/util/navigateModal";
+import { fetcher } from "@/lib/fetcher";
+import { useCurrentUser } from "@/hooks/useCurrentUser";
+import {
+  showSignUp,
+  showCompleteProfile,
+  showLinkSteam,
+} from "@/lib/util/navigateModal";
 export default function SignInContent() {
   const { data: { user } = {}, mutate, isValidating } = useCurrentUser();
   const router = useRouter();
+
   useEffect(() => {
     if (isValidating) return;
-    if (user) console.log(user);
+    if (user && !user.registered) {
+      showCompleteProfile(router);
+    } else if (user && user.registered && !user.linked) {
+      showLinkSteam(router);
+    } else if (user && user.registered && user.linked) {
+      router.replace("/dashboard");
+    }
   }, [user, router, isValidating]);
   const [loading, setLoading] = useState(false);
   const [loginFailed, setLoginFailed] = useState(false);
@@ -33,6 +44,7 @@ export default function SignInContent() {
         } else {
           setLoginFailed(false);
           mutate({ user: response.user }, false);
+          console.log(response.user);
         }
       } catch (e) {
         setLoginFailed(true);
@@ -91,7 +103,9 @@ export default function SignInContent() {
               }`}
             />
             {loginFailed ? (
-              <p className="font-bold text-red-500">Login Failed.</p>
+              <p className="font-bold text-red-500">
+                Email or Password is incorrect.
+              </p>
             ) : null}
             <button
               type="submit"
