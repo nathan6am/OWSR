@@ -15,9 +15,7 @@ handler.use(...auths).get(path, async (req, res, next) => {
     },
     (err, user, options) => {
       if (options) {
-        res.redirect(
-          `/?auth=link-steam&message=${encodeURIComponent(options.message)}`
-        );
+        res.redirect(`/?auth=link-steam-failed`);
       } else {
         res.redirect("/dashboard");
       }

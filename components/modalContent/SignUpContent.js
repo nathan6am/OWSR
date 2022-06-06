@@ -107,7 +107,7 @@ export default function SignUpContent() {
               className="input-field"
             />
             <p className="text-red-700 w-full text-left font-bold">
-              * {errorMessage}
+              {errorMessage}
             </p>
             <button
               type="submit"
@@ -141,14 +141,14 @@ export default function SignUpContent() {
       <p className="text-center text-red-700 mt-6 mb-1">
         Already have an account?{" "}
       </p>
-      <a
-        onClick={() => {
+      <button
+        onClick={(e) => {
           showSignIn(router);
         }}
         className="text-white hover:text-red-600 hover:underline cursor-pointer text-center text-lg "
       >
         SIGN IN
-      </a>
+      </button>
     </>
   );
 }

@@ -19,16 +19,20 @@ const customDialogStyles = {
     backgroundColor: "rgba(8, 8, 8, 0.4)",
   },
 };
-export default function CancelDialog({ isOpen, setIsOpen, onCancel }) {
+export default function CancelDialog({
+  isOpen,
+  setIsOpen,
+  onCancel,
+  title,
+  message,
+}) {
   return (
     <Modal style={customDialogStyles} isOpen={isOpen}>
       <div className="flex flex-1 flex-col">
         <h2 className="w-full bg-red-500 text-center py-3 text-lg border-b border-red-700">
-          Cancel Account Creation
+          {title}
         </h2>
-        <div className="text-dark-100 py-8 px-8">
-          Are you sure you want to cancel setting up your account?
-        </div>
+        <div className="text-dark-100 py-8 px-8">{message}</div>
         <div className="flex flex-row justify-end items-center px-5 bg-dark-900 border-t border-dark-700">
           <button
             onClick={() => {

@@ -6,6 +6,7 @@ import { useRouter } from "next/router";
 import { FaDiscord, FaSteam } from "react-icons/fa";
 import { fetcher } from "@/lib/fetcher";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
+import CountrySelect from "../UI/CountrySelect";
 import {
   showSignUp,
   showCompleteProfile,
@@ -61,6 +62,7 @@ export default function SignInContent() {
         src="/images/logo.png"
         width={200}
       ></img>
+
       <h1 className="text-red-700 text-center text-xl mb-3">SIGN IN</h1>
       <Formik
         initialValues={{
@@ -139,14 +141,15 @@ export default function SignInContent() {
       <p className="text-center text-red-700 mt-6 mb-1">
         Don't have an account?{" "}
       </p>
-      <a
+      <button
         onClick={() => {
           showSignUp(router);
         }}
-        className="text-white hover:text-red-600 hover:underline cursor-pointer text-center text-lg "
+        className="text-white hover:text-red-600 hover:underline cursor-pointer text-center text-lg"
+        role="button"
       >
         SIGN UP NOW
-      </a>
+      </button>
     </>
   );
 }

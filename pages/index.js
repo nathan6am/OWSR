@@ -25,6 +25,7 @@ export default function Home({ events }) {
       <section className="flex bg-dark-200">
         <GetStartedSection />
       </section>
+      <img src="/icons/flags/ad.svg" height={20} width={40} />
       <section className="flex flex-col bg-transparent w-full h-[500px]">
         <h1 className="text-center">About</h1>
       </section>
@@ -36,6 +37,7 @@ export default function Home({ events }) {
 }
 
 function Hero() {
+  const router = useRouter();
   return (
     <div
       className="w-full flex justify-center min-h-screen items-around relative "

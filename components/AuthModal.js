@@ -10,7 +10,7 @@ import { useCurrentUser } from "../hooks/useCurrentUser";
 import { useRouter } from "next/router";
 import CancelDialog from "./modalContent/CancelDialog";
 import { fetcher } from "../lib/fetcher";
-
+import LinkFailedContent from "./modalContent/LinkFailedContent";
 const customStyles = {
   content: {
     top: "50%",
@@ -29,9 +29,12 @@ const customStyles = {
   },
 };
 
-export default function AuthModal({ isOpen }) {
-  const { data: { user } = {}, mutate, isValidating } = useCurrentUser();
+export default function AuthModal() {
+  const router = useRouter();
+  const { data: { user } = {}, mutate } = useCurrentUser();
   const [dialogOpen, setDialogOpen] = useState(false);
+
+  //Deletes incomplete profile from database and hides the modal
   const onCancel = useCallback(async () => {
     try {
       await fetcher("/api/users/me", {
@@ -46,8 +49,11 @@ export default function AuthModal({ isOpen }) {
       console.error(e.message);
     }
   }, [mutate]);
-  const router = useRouter();
+
+  //Modal content set with router "auth" query
   const page = router.query?.auth;
+
+  //Toggle modal open with contextual routing, modal will appear only if query.auth exists
   const [modalOpen, setModalOpen] = useState(false);
   useEffect(() => {
     if (!router.query || !router.query.auth) {
@@ -64,6 +70,8 @@ export default function AuthModal({ isOpen }) {
           isOpen={dialogOpen}
           setIsOpen={setDialogOpen}
           onCancel={onCancel}
+          title="Cancel Account Setup"
+          message="Are you sure you want to cancel setting up your account? All progress will be lost."
         />
         <MdCancel
           className="modal-close-btn text-white/[0.8] hover:text-red-500/[0.8]"
@@ -82,6 +90,7 @@ export default function AuthModal({ isOpen }) {
     </>
   );
 }
+
 function Content({ page }) {
   switch (page) {
     case "sign-in":
@@ -92,6 +101,8 @@ function Content({ page }) {
       return <CompleteProfileContent />;
     case "link-steam":
       return <LinkSteamContent />;
+    case "link-steam-failed":
+      return <LinkFailedContent />;
     default:
       return <SignInContent />;
   }
