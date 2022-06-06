@@ -11,7 +11,6 @@ handler
     passport.authenticate("steam", { failureRedirect: "/?auth=sign-in" })
   )
   .get(path, (req, res) => {
-    console.log(req.user);
     return res.redirect("/dashboard");
   });
 export default handler;
