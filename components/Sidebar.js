@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { BsFillCalendar2WeekFill } from "react-icons/bs";
 import { FaFlagCheckered, FaTrophy } from "react-icons/fa";
@@ -6,11 +6,13 @@ import { MdNotifications, MdLogout } from "react-icons/md";
 import Helmet from "../public/icons/helmet.svg";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { UserContext } from "./layouts/DashboardLayout";
 
-export default function Sidebar({ user, signOut, toggle, collapse }) {
+export default function Sidebar({ signOut, toggle, collapse }) {
   const router = useRouter();
   const pathname = router.pathname;
   const [activeTab, setActiveTab] = useState("my-races");
+  const user = useContext(UserContext);
   useEffect(() => {
     if (pathname.startsWith("/dashboard/my-races")) {
       setActiveTab("my-races");

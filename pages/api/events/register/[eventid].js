@@ -26,14 +26,14 @@ handler
     const { eventid } = req.query;
     const userid = req.user?._id;
     try {
-      const registration = await db.registerForEvent(userid, eventid);
-      if (!registration) {
+      const canceled = await db.cancelRegistration(userid, eventid);
+      if (!canceled) {
         res
-          .status(404)
-          .json({ success: false, message: "Unable to register!" });
+          .status(400)
+          .json({ success: false, message: "Unable to cancel registration" });
         return;
       }
-      res.status(200).json({ success: true, registration: registration });
+      res.status(200).json({ success: true });
     } catch (err) {
       res.status(400).json({ success: false, message: err.message });
     }

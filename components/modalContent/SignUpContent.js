@@ -102,7 +102,7 @@ export default function SignUpContent() {
             <Field
               id="confirmPassword"
               name="confirmPassword"
-              type="confirmPassword"
+              type="password"
               placeholder="Re-enter password"
               className="input-field"
             />

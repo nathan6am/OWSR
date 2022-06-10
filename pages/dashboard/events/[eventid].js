@@ -1,10 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import useSWR from "swr";
 import { fetcher } from "@/lib/fetcher";
 import Countdown from "@/components/Countdown";
 import Loading from "@/components/Loading";
 import EventIcon from "@/components/dashboard/EventIcon";
-import { MdDownload } from "react-icons/md";
+import { MdDownload, MdCancel } from "react-icons/md";
 import { FaDollarSign } from "react-icons/fa";
 import { ImUnlocked, ImLock } from "react-icons/im";
 import { BsFillCloudSunFill } from "react-icons/bs";
@@ -12,12 +12,23 @@ import { DateTime } from "luxon";
 import axios from "axios";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
 import toast from "react-hot-toast";
+import CancelDialog from "@/components/modalContent/CancelDialog";
+import SessionTabs from "@/components/dashboard/SessionTabs";
+
 export default function EventDetails({ eventid }) {
   const { data: userData } = useCurrentUser();
   const { data, mutate, error } = useSWR(`/api/events/${eventid}`, fetcher);
+  const [cancelDialogOpen, setCancelDialogOpen] = useState(false);
   const onRegister = async () => {
     const res = await axios.post(`/api/events/register/${eventid}`);
     if (res?.data?.success) {
+      mutate();
+    }
+  };
+  const onCancelRegister = async () => {
+    const res = await axios.delete(`/api/events/register/${eventid}`);
+    if (res?.data?.success) {
+      setCancelDialogOpen(false);
       mutate();
     }
   };
@@ -30,9 +41,17 @@ export default function EventDetails({ eventid }) {
         <Loading />
       ) : (
         <>
+          <CancelDialog
+            isOpen={cancelDialogOpen}
+            setIsOpen={setCancelDialogOpen}
+            message="Are you sure you want to cancel your registration?"
+            title="Cancel Registraion"
+            onCancel={onCancelRegister}
+          />
           <Header
             event={event}
             onRegister={onRegister}
+            onCancelRegister={() => setCancelDialogOpen(true)}
             registered={registered}
           />
           <div className="container py-8 ">
@@ -44,6 +63,7 @@ export default function EventDetails({ eventid }) {
                 <WeatherCard weather={event.details.weather} />
               </div>
             </div>
+            <SessionTabs sessions={event.sessions} />
           </div>
         </>
       )}
@@ -176,14 +196,18 @@ function RenderCar({ car }) {
 function RenderTrack({ track }) {
   return (
     <div
-      className="w-[240px] h-[140px] bg-cover rounded overflow-hidden border border-white/[0.3] relative"
+      className="w-[230px]  h-[140px] bg-cover rounded overflow-hidden border border-white/[0.3] relative"
       style={{
         backgroundImage: `url(${track.image})`,
         backgroundPosition: "center",
       }}
     >
-      <div className="w-full h-full bg-dark-100/[0.3]">
+      <div className="w-full h-full bg-dark-100/[0.5]">
         <p className="p-2 rounded bg-white/[0.2]">{track.name}</p>
+        <div className="absolute bottom-2 right-2">
+          <p>Turns: {track.corners}</p>
+          <p>{track.length}km</p>
+        </div>
         {track.isMod && (
           <a
             target="blank"
@@ -205,7 +229,7 @@ function RenderTrack({ track }) {
   );
 }
 
-function Header({ event, onRegister, registered }) {
+function Header({ event, onRegister, registered, onCancelRegister }) {
   const dt = new DateTime(event.date);
   return (
     <div
@@ -246,27 +270,57 @@ function Header({ event, onRegister, registered }) {
                 >{`${event.emptySlots}/${event.details.gridSize}`}</span>
               </h2>
             </div>
-            {registered && "You are registred for this event"}
-            {event.isFull ? (
-              <button className="bg-yellow-500 hover:bg-yellow-600 shadow px-6 py-4 rounded text-lg h-fit w-fit">
-                Join the Waitlist
-              </button>
-            ) : (
-              <button
-                onClick={onRegister}
-                className="bg-green-500 hover:bg-green-600 shadow px-6 py-4 rounded text-lg h-fit w-fit"
-              >
-                Register for this Event!
-              </button>
-            )}
+
             <img
               className="sm:absolute sm:bottom-2 sm:right-4 my-3"
               src="/images/AC-logo.png"
               width="200"
             />
+            <RegisterButton
+              event={event}
+              onRegister={onRegister}
+              onCancelRegister={onCancelRegister}
+              registered={registered}
+            />
           </div>
         </div>
       </div>
     </div>
+  );
+}
+
+function RegisterButton({ event, onCancelRegister, onRegister, registered }) {
+  return (
+    <>
+      {registered ? (
+        <>
+          <div>
+            You are registered for this event
+            <button
+              onClick={onCancelRegister}
+              className="flex flex-row w-fit bg-red-500 hover:bg-red-400 my-2 py-2 px-4 rounded items-center"
+            >
+              Cancel Registration
+              <MdCancel className="inline ml-2 text-xl" />
+            </button>
+          </div>
+        </>
+      ) : (
+        <>
+          {event.isFull ? (
+            <button className="bg-yellow-500 hover:bg-yellow-600 shadow px-6 py-4 rounded text-lg h-fit w-fit">
+              Join the Waitlist
+            </button>
+          ) : (
+            <button
+              onClick={onRegister}
+              className="bg-green-500 hover:bg-green-600 shadow px-6 py-4 rounded text-lg h-fit w-fit"
+            >
+              Register for this Event!
+            </button>
+          )}
+        </>
+      )}
+    </>
   );
 }

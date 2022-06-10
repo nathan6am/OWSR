@@ -16,10 +16,49 @@
     "series": "Formula Abarth Championship Series",
     "title": "FA01 @ Laguna Seca",
     "description": "Tatuus FA01 @ Weathertech Raceway",
-    "track": "Laguna Seca International",
-    "date": "2022-06-04T21:00:00.000Z",
-    "game": "asseto-corsa",
-    "image": "/images/fa01.jpg"
+    "date": "2022-06-15T21:00:00.000Z",
+    "game": "assetto-corsa",
+    "image": "/images/fa01.jpg",
+    "headerImage": "https://owsr-public.s3.amazonaws.com/Screenshot_tatuusfa1_ks_laguna_seca_9-5-122-10-42-1.jpg",
+    "track": "62a1596caa5085b94d7f6351",
+    "cars": [
+      "62a15f56aa5085b94d7f6360"
+    ],
+    "modsRequired": false,
+    "paidContent": false,
+    "details": {
+      "gridSize": 25,
+      "fixedSetup": true,
+      "damage": 0.5,
+      "weather": {
+        "description": "Clear",
+        "temp": 25,
+        "trackTemp": 33,
+        "wind": 2,
+        "windVariance": 1
+      },
+      "trackState": {
+        "starting": 99,
+        "development": "1% every 100L"
+      }
+    },
+    "sessions": [
+      {
+        "sessionType": "practice",
+        "duration": 25
+      },
+      {
+        "sessionType": "qualifying",
+        "duration": 15,
+        "qualiType": "fastest"
+      },
+      {
+        "sessionType": "race",
+        "duration": 10,
+        "durationType": "laps",
+        "pitStopsRequired": 0
+      }
+    ]
   },
   {
     "featured": true,
@@ -30,7 +69,6 @@
     "date": "2022-06-12T18:00:00.000Z",
     "game": "asseto-corsa",
     "image": "https://owsr-public.s3.amazonaws.com/f2004spacard.jpg",
-    "headerImage": "https://owsr-public.s3.us-east-1.amazonaws.com/f2004spaheader",
     "track": "62a22f032eaa4ec574083789",
     "cars": [
       "62a15e25aa5085b94d7f6359"
