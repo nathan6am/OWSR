@@ -1,6 +1,6 @@
 import nc from "next-connect";
 
-import User from "@/lib/models/User";
+import User from "@/lib/db/models/User";
 import bcrypt from "bcrypt";
 import auths from "@/lib/middlewares/auths";
 import filterUser from "@/lib/util/filterUser";

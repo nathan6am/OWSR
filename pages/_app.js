@@ -2,7 +2,6 @@ import "../styles/globals.css";
 import PublicLayout from "../components/layouts/PublicLayout";
 import { Provider } from "react-redux";
 import store from "../redux/store";
-import AuthModal from "../components/AuthModal";
 import DashboardLayout from "../components/layouts/DashboardLayout";
 const layouts = {
   Public: PublicLayout,

@@ -86,9 +86,6 @@ export default function Navbar() {
                 <li className="nav-li">
                   <Link href="/events">About</Link>
                 </li>
-                <li className="nav-li">
-                  <Link href="/dashboard">Dashboard</Link>
-                </li>
               </ul>
             </div>
             <div className="flex flex-row items-center">

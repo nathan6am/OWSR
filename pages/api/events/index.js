@@ -9,7 +9,7 @@ handler
   .get(async (req, res) => {
     try {
       const events = await db.getAllEvents();
-      res.status(200).json({ success: true, data: events });
+      res.status(200).json({ success: true, events: events });
     } catch (error) {
       res.status(400).json({ success: false });
     }
@@ -17,7 +17,7 @@ handler
   .post(verifyAdmin, async (req, res) => {
     try {
       const event = await db.createEvent(req.body);
-      res.status(201).json({ success: true, data: event });
+      res.status(201).json({ success: true, event: event });
     } catch (error) {
       res.status(400).json({ success: false, error: error });
     }

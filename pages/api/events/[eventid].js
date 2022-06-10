@@ -15,7 +15,7 @@ handler
         res.status(404).json({ success: false, message: "Event not found" });
         return;
       }
-      res.status(200).json({ success: true, data: event });
+      res.status(200).json({ success: true, event: event });
     } catch (err) {
       res.status(400).json({ success: false, message: err.message });
     }

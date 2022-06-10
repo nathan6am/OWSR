@@ -24,12 +24,101 @@
   {
     "featured": true,
     "type": "weekly",
-    "series": "OWSR Weekly Race",
-    "title": "F2004 @ Spa",
+    "title": "OSWR Feature Race: F2004 @ Spa",
+    "slug": "owsr-feature-f2004-spa",
     "description": "Ferrari F2004 @ Circuit de Spa Francorchamps",
-    "track": "Laguna Seca International",
-    "date": "2022-06-05T21:00:00.000Z",
+    "date": "2022-06-12T18:00:00.000Z",
     "game": "asseto-corsa",
-    "image": "/images/ferrari.jpg"
+    "image": "https://owsr-public.s3.amazonaws.com/f2004spacard.jpg",
+    "headerImage": "https://owsr-public.s3.us-east-1.amazonaws.com/f2004spaheader",
+    "track": "62a22f032eaa4ec574083789",
+    "cars": [
+      "62a15e25aa5085b94d7f6359"
+    ],
+    "modsRequired": false,
+    "paidContent": false,
+    "details": {
+      "gridSize": 20,
+      "fixedSetup": true,
+      "damage": 0.5,
+      "weather": {
+        "description": "Clear",
+        "temp": 25,
+        "trackTemp": 33,
+        "wind": 2,
+        "windVariance": 1
+      },
+      "trackState": {
+        "starting": 99,
+        "development": "1% every 100L"
+      }
+    },
+    "sessions": [
+      {
+        "sessionType": "practice",
+        "duration": 25
+      },
+      {
+        "sessionType": "qualifying",
+        "duration": 15,
+        "qualiType": "fastest"
+      },
+      {
+        "sessionType": "race",
+        "duration": 10,
+        "durationType": "laps",
+        "pitStopsRequired": 0
+      }
+    ]
+  },
+  {
+    "featured": true,
+    "type": "championship",
+    "title": "OSWR F1 Championship || Round 1: Bahrain",
+    "slug": "owsr-f1-round1",
+    "description": "VRC Formula Alpha @ Bahrain International",
+    "date": "2022-06-17T22:00:00.000Z",
+    "game": "assetto-corsa",
+    "image": "https://owsr-public.s3.amazonaws.com/bahrainf1.jpg",
+    "headerImage": "https://owsr-public.s3.amazonaws.com/bahrainf1header.jpg",
+    "track": "62a233e9a6ed220817711f29",
+    "cars": [
+      "62a15f95aa5085b94d7f6368"
+    ],
+    "modsRequired": true,
+    "paidContent": true,
+    "details": {
+      "gridSize": 20,
+      "fixedSetup": false,
+      "damage": 0.5,
+      "weather": {
+        "description": "Clear",
+        "temp": 16,
+        "trackTemp": 23,
+        "wind": 2,
+        "windVariance": 1
+      },
+      "trackState": {
+        "starting": 99,
+        "development": "1% every 100L"
+      }
+    },
+    "sessions": [
+      {
+        "sessionType": "practice",
+        "duration": 30
+      },
+      {
+        "sessionType": "qualifying",
+        "duration": 15,
+        "qualiType": "fastest"
+      },
+      {
+        "sessionType": "race",
+        "duration": 15,
+        "durationType": "laps",
+        "pitStopsRequired": 0
+      }
+    ]
   }
 ]

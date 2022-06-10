@@ -1,10 +1,9 @@
-import Head from "next/head";
-import Image from "next/image";
+
 import dbConnect from "../lib/db/dbConnect";
-import Event from "../lib/models/Event";
+import Event from "../lib/db/models/Event";
 import { useRouter } from "next/router";
 import React, { useState, useEffect } from "react";
-import { FaDiscord, FaYoutube, FaTwitch, FaFacebook } from "react-icons/fa";
+import { FaDiscord, } from "react-icons/fa";
 import GetStartedSection from "../components/GetStartedSection";
 import EventsCarousel from "../components/EventsCarousel";
 import { showSignIn, showSignUp } from "../lib/util/navigateModal";

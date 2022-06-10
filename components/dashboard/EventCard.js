@@ -4,6 +4,7 @@ import { IoStar } from "react-icons/io5";
 import { BsFillCalendar2WeekFill } from "react-icons/bs";
 import { FaTrophy } from "react-icons/fa";
 import { DateTime } from "luxon";
+import ReactTooltip from "react-tooltip";
 
 export default function EventCard({ event }) {
   function formatTimer(val) {
@@ -20,12 +21,15 @@ export default function EventCard({ event }) {
     expiryTimestamp: new Date(event.date),
     autoStart: false,
   });
+
   useEffect(() => {
     timeUntil.start();
   }, []);
+
   return (
-    <div className="flex flex-col w-full  rounded shadow-lg bg-dark-200 overflow-hidden group cursor-pointer min-h-[280px] md:min-h-[320px] max-w-[500px] mx-auto">
+    <div className="flex flex-col w-full  rounded shadow-lg hover:shadow-red-700/[0.2]  bg-dark-300 overflow-hidden group cursor-pointer min-h-[280px] md:min-h-[320px] max-w-[500px] mx-auto">
       <div className="flex-grow overflow-hidden relative">
+        {/* <ReactTooltip effect="solid" place="top" /> */}
         <div
           className="w-full h-full group-hover:scale-105 transition-all ease-in-out "
           style={{
@@ -39,16 +43,18 @@ export default function EventCard({ event }) {
             <div className="opacity-0 transition-opacity ease-in-out group-hover:opacity-50 bg-red-700 flex w-full h-full"></div>
           </div>
         </div>
-        <h2 className="absolute top-2 left-2 rounded-md bg-dark-200/[0.8] px-3 max-w-[90%]">
+        <h2 className="absolute top-2 left-2 rounded-md bg-dark-200/[0.8] px-3 max-w-[85%]">
           {event.title}
         </h2>
         <div
           suppressHydrationWarning={true}
           className="absolute bottom-2 left-2 rounded-md bg-red-700/[0.8] py-2 px-3"
         >
-          {`${timeUntil.days}d ${formatTimer(timeUntil.hours)}h : ${formatTimer(
-            timeUntil.minutes
-          )}min`}
+          {timeUntil.days
+            ? `${timeUntil.days} day${timeUntil.days > 1 ? "s" : ""} `
+            : `${formatTimer(timeUntil.hours)}h : ${formatTimer(
+                timeUntil.minutes
+              )}min`}
         </div>
 
         <EventIcon eventType={event.type} />
@@ -65,7 +71,7 @@ export default function EventCard({ event }) {
         <p className="text-sm text-white/[0.6]">
           {`${dt.toLocaleString(DateTime.DATETIME_MED)} - (${dt
             .toUTC()
-            .toFormat("hhmm")} UTC)`}
+            .toFormat("hh:mm")} UTC)`}
         </p>
       </div>
     </div>
@@ -76,20 +82,39 @@ function EventIcon({ eventType }) {
   switch (eventType) {
     case "special":
       return (
-        <IoStar className="absolute top-2 right-2 text-red-500" size="2rem" />
+        <IoStar
+          data-tip="Special Event"
+          className="absolute top-2 right-2 text-red-500"
+          size="2rem"
+        />
       );
     case "weekly":
       return (
         <BsFillCalendar2WeekFill
+          data-tip="Weekly Race"
+          data-event-off="mouse-leave"
           className="absolute top-2 right-2 text-red-500"
           size="2rem"
         />
       );
     case "championship":
       return (
-        <FaTrophy className="absolute top-2 right-2 text-red-500" size="2rem" />
+        <FaTrophy
+          data-tip="Championship Race"
+          className="absolute top-2 right-2 text-red-500"
+          size="2rem"
+        />
+      );
+    case "hotlap":
+      return (
+        <FaTrophy
+          className="absolute top-2 right-2 text-red-500"
+          size="2.5rem"
+        />
       );
     default:
       return null;
   }
 }
+
+function GameLogo({ game }) {}
