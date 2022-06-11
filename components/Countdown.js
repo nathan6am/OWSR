@@ -19,7 +19,7 @@ export default function Countdown({ date, showFull }) {
   return (
     <>
       {showFull ? (
-        <>{`${timeUntil.days} day${timeUntil.days > 1 && "s"} ${formatTimer(
+        <>{`${timeUntil.days} day${timeUntil.days > 1 ? "s" : ""} ${formatTimer(
           timeUntil.hours
         )}h : ${formatTimer(timeUntil.minutes)}m : ${formatTimer(
           timeUntil.seconds

@@ -7,10 +7,17 @@ const handler = nc();
 handler.use(...auths);
 handler
   .get(async (req, res) => {
+    const { page, limit } = req.query;
     try {
-      const events = await db.getAllEvents();
-      res.status(200).json({ success: true, events: events });
+      if (req.body?.filters) {
+        const result = await db.getEvents(req.body?.filters, page, limit);
+        res.status(200).json({ success: true, events: result.docs });
+      } else {
+        const result = await db.getEvents(null, page, limit);
+        res.status(200).json({ success: true, events: result.docs });
+      }
     } catch (error) {
+      console.error(error.message);
       res.status(400).json({ success: false });
     }
   })
