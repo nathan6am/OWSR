@@ -16,14 +16,18 @@ export default function Countdown({ date, showFull }) {
     expiryTimestamp: new Date(date),
     autoStart: true,
   });
+  const days = timeUntil.days
+    ? `${timeUntil.days} day${timeUntil.days > 1 ? "s" : ""} `
+    : "";
   return (
     <>
       {showFull ? (
-        <>{`${timeUntil.days} day${timeUntil.days > 1 ? "s" : ""} ${formatTimer(
-          timeUntil.hours
-        )}h : ${formatTimer(timeUntil.minutes)}m : ${formatTimer(
-          timeUntil.seconds
-        )}s`}</>
+        <>
+          {days +
+            `${formatTimer(timeUntil.hours)}h : ${formatTimer(
+              timeUntil.minutes
+            )}m : ${formatTimer(timeUntil.seconds)}s`}
+        </>
       ) : (
         <>
           {timeUntil.days

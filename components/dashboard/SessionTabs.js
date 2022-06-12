@@ -12,14 +12,14 @@ export default function SessionTabs({ sessions }) {
             return (
               <Tab
                 className={({ selected }) =>
-                  `w-[100px] sm:w-[120px] py-4  ${
+                  `w-[90px] sm:w-[120px] py-4  ${
                     selected
                       ? " text-red-500 border-b-4 border-red-500 "
                       : "hover:bg-dark-500 hover:border-b-4 hover:border-red-400 hover:text-red-400"
                   }`
                 }
               >
-                <h2 className="text-md">
+                <h2 className="text-sm sm:text-md">
                   {session.sessionType.charAt(0).toUpperCase() +
                     session.sessionType.slice(1)}
                 </h2>

@@ -6,12 +6,15 @@ import { fetcher } from "@/lib/fetcher";
 import { GiHamburgerMenu } from "react-icons/gi";
 import Loading from "../Loading";
 import { Toaster } from "react-hot-toast";
-import { useProfile } from "@/hooks/useProfile";
+import { useMediaQuery } from "@react-hook/media-query";
 
 export const UserContext = createContext();
 export default function DashboardLayout({ children }) {
   const [verifying, setVerifying] = useState(true);
   const { data: { user } = {}, mutate, isValidating } = useCurrentUser();
+  const isMobile = useMediaQuery("only screen and (max-width: 640px)");
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(isMobile);
+
   const router = useRouter();
   useEffect(() => {
     if (isValidating) return;
@@ -25,6 +28,12 @@ export default function DashboardLayout({ children }) {
       setVerifying(false);
     }
   }, [user, router, isValidating]);
+  useEffect(() => {
+    console.log(isMobile);
+    if (isMobile) {
+      setSidebarCollapsed(true);
+    }
+  }, [router.asPath]);
   const toggleSidebar = () => {
     setSidebarCollapsed(!sidebarCollapsed);
   };
@@ -41,7 +50,6 @@ export default function DashboardLayout({ children }) {
     }
   }, [mutate]);
 
-  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   return (
     <>
       {verifying ? (
@@ -51,14 +59,14 @@ export default function DashboardLayout({ children }) {
       ) : (
         <>
           <UserContext.Provider value={user}>
-            <Toaster />
+            <Toaster position="top-right" />
             <button
-              className={`text-white hover:opacity-75 fixed top-4 left-6 p-2 bg-white/[0.3] rounded-xl sm:hidden ${
-                sidebarCollapsed && "sm:hidden"
+              className={`text-white z-[90] hover:opacity-75 fixed top-4 left-6 p-2 bg-white/[0.3] rounded-xl sm:hidden ${
+                sidebarCollapsed ? "sm:hidden" : "hidden"
               }`}
               onClick={toggleSidebar}
             >
-              <GiHamburgerMenu size={20} />
+              <GiHamburgerMenu size={25} />
             </button>
 
             <Sidebar
@@ -67,7 +75,7 @@ export default function DashboardLayout({ children }) {
               toggle={toggleSidebar}
             />
             <main
-              className={`w-full bg-dark-100 trasition ease-in-out duration-500 ${
+              className={`w-full bg-dark-150 trasition ease-in-out duration-500 ${
                 sidebarCollapsed
                   ? "pl-0 sm:pl-[70px]"
                   : "sm:pl-[70px] lg:pl-[300px]"

@@ -3,21 +3,23 @@ import useSWR from "swr";
 import { fetcher } from "@/lib/fetcher";
 import EventGrid from "@/components/dashboard/EventGrid";
 import EventFilters from "@/components/dashboard/EventFilters";
-
+import Loading from "@/components/Loading";
 export default function Events() {
   const [query, updateQuery] = useState("/api/events");
+  const [filters, setFilters] = useState(null);
   const { data, error, mutate, isValidating } = useSWR(query, fetcher);
   const results = data?.events;
-  const onUpdateSearch = (query) => {
-    console.log("searchUpdated");
-  };
 
   return (
     <>
       <Header />
       <main className="container min-h-screen">
-        <EventFilters onUpdateSearch={onUpdateSearch} />
-        <EventGrid events={results} />
+        <EventFilters
+          filters={filters}
+          setFilters={setFilters}
+          refresh={() => mutate()}
+        />
+        {isValidating ? <Loading /> : <EventGrid events={results} />}
       </main>
     </>
   );

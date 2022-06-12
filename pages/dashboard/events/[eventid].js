@@ -4,33 +4,48 @@ import { fetcher } from "@/lib/fetcher";
 import Countdown from "@/components/Countdown";
 import Loading from "@/components/Loading";
 import EventIcon from "@/components/dashboard/EventIcon";
-import { MdDownload, MdCancel } from "react-icons/md";
+import { MdDownload, MdCancel, Md } from "react-icons/md";
 import { FaDollarSign } from "react-icons/fa";
 import { ImUnlocked, ImLock } from "react-icons/im";
 import { BsFillCloudSunFill } from "react-icons/bs";
+import { HiPencilAlt } from "react-icons/hi";
+import { FcCancel } from "react-icons/fc";
 import { DateTime } from "luxon";
 import axios from "axios";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
+import { ClipLoader } from "react-spinners";
 import toast from "react-hot-toast";
 import CancelDialog from "@/components/modalContent/CancelDialog";
 import SessionTabs from "@/components/dashboard/SessionTabs";
+import { icons } from "react-icons";
 
 export default function EventDetails({ eventid }) {
   const { data: userData } = useCurrentUser();
   const { data, mutate, error } = useSWR(`/api/events/${eventid}`, fetcher);
   const [cancelDialogOpen, setCancelDialogOpen] = useState(false);
+  const [regLoading, setRegLoading] = useState(false);
   const onRegister = async () => {
+    setRegLoading(true);
     const res = await axios.post(`/api/events/register/${eventid}`);
     if (res?.data?.success) {
       mutate();
+
+      toast.success("Registration Successful");
     }
+    setRegLoading(false);
   };
   const onCancelRegister = async () => {
+    setRegLoading(true);
     const res = await axios.delete(`/api/events/register/${eventid}`);
     if (res?.data?.success) {
       setCancelDialogOpen(false);
       mutate();
+      toast("Registration Canceled", {
+        icon: <FcCancel size={24} />,
+        duration: 2000,
+      });
     }
+    setRegLoading(false);
   };
   const event = data?.event;
   const registered = data?.event.registeredDrivers.includes(userData?.user._id);
@@ -38,7 +53,9 @@ export default function EventDetails({ eventid }) {
   return (
     <>
       {!data ? (
-        <Loading />
+        <div className="min-h-screen flex justify-center items-center">
+          <Loading />
+        </div>
       ) : (
         <>
           <CancelDialog
@@ -53,6 +70,7 @@ export default function EventDetails({ eventid }) {
             onRegister={onRegister}
             onCancelRegister={() => setCancelDialogOpen(true)}
             registered={registered}
+            loading={regLoading}
           />
           <div className="container py-8 ">
             <h2 className="text-2xl py-3">Event Info</h2>
@@ -229,7 +247,7 @@ function RenderTrack({ track }) {
   );
 }
 
-function Header({ event, onRegister, registered, onCancelRegister }) {
+function Header({ event, onRegister, registered, onCancelRegister, loading }) {
   const dt = new DateTime(event.date);
   return (
     <div
@@ -258,7 +276,7 @@ function Header({ event, onRegister, registered, onCancelRegister }) {
                   .toFormat("hh:mm")} UTC)`}
               </h2>
               <div className="bg-red-500/[0.7] rounded py-2 px-6 text-white w-fit my-6 ">
-                <Countdown date={event.date} showFull />
+                <Countdown date={event.date} showFull={true} />
               </div>
 
               <h2 className="my-6  w-fit">
@@ -277,6 +295,7 @@ function Header({ event, onRegister, registered, onCancelRegister }) {
               width="200"
             />
             <RegisterButton
+              loading={loading}
               event={event}
               onRegister={onRegister}
               onCancelRegister={onCancelRegister}
@@ -289,7 +308,13 @@ function Header({ event, onRegister, registered, onCancelRegister }) {
   );
 }
 
-function RegisterButton({ event, onCancelRegister, onRegister, registered }) {
+function RegisterButton({
+  event,
+  onCancelRegister,
+  onRegister,
+  registered,
+  loading,
+}) {
   return (
     <>
       {registered ? (
@@ -308,15 +333,24 @@ function RegisterButton({ event, onCancelRegister, onRegister, registered }) {
       ) : (
         <>
           {event.isFull ? (
-            <button className="bg-yellow-500 hover:bg-yellow-600 shadow px-6 py-4 rounded text-lg h-fit w-fit">
-              Join the Waitlist
+            <button className="bg-yellow-500 hover:bg-yellow-600 shadow px-4 py-4 rounded text-lg h-fit w-fit">
+              {loading ? (
+                <ClipLoader color="white" size="32px" />
+              ) : (
+                "Join the Waitlist"
+              )}
             </button>
           ) : (
             <button
               onClick={onRegister}
-              className="bg-green-500 hover:bg-green-600 shadow px-6 py-4 rounded text-lg h-fit w-fit"
+              className="bg-green-500 hover:bg-green-600 shadow px-4 py-4 rounded text-lg h-fit w-fit flex flex-row items-center"
             >
-              Register for this Event!
+              <p className="mr-2">Register for this Event</p>
+              {loading ? (
+                <ClipLoader color="white" size={24} />
+              ) : (
+                <HiPencilAlt className="inline" size={24} />
+              )}
             </button>
           )}
         </>

@@ -28,7 +28,7 @@ export default function Sidebar({ signOut, toggle, collapse }) {
   }, [pathname]);
   return (
     <div
-      className={` z-50 min-h-screen  w-[300px] bg-dark-200 flex flex-col justify-between h-full border-r border-dark-400 fixed trasition ease-in-out duration-500 ${
+      className={` z-[100] min-h-screen  w-[300px] bg-dark-200 flex flex-col justify-between h-full border-r border-dark-400 fixed trasition ease-in-out duration-500 ${
         collapse
           ? "translate-x-[-300px] sm:translate-x-[-230px]"
           : "translate-x-0 "
@@ -114,7 +114,7 @@ const SidebarNavItem = ({
         <Icon
           className={`inline ${
             active ? "fill-red-500 text-red-500" : "fill-white text-white "
-          } ${collapse ? "translate-x-[223px]" : "mr-6"}`}
+          } ${collapse ? "sm:translate-x-[223px] sm:mr-0 mr-6" : "mr-6"}`}
           size={iconSize || 20}
         />
         {label}

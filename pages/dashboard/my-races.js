@@ -3,6 +3,7 @@ import useSWR from "swr";
 import { fetcher } from "@/lib/fetcher";
 import EventGrid from "@/components/dashboard/EventGrid";
 import Link from "next/link";
+import Loading from "@/components/Loading";
 export default function MyRaces() {
   const { data, error, mutate, isValidating } = useSWR(
     "/api/events/my-events",
@@ -16,18 +17,24 @@ export default function MyRaces() {
       <Header />
       <div className="container py-8 h-[100%] ">
         <section className="border-b">
-          <h1>My Upcoming Events</h1>
-          {registeredEvents?.length ? (
-            <EventGrid events={registeredEvents.slice(0, eventsToShow)} />
+          <h1 className="mt-3 text-3xl xl:text-4xl">My Events</h1>
+          {isValidating ? (
+            <Loading />
           ) : (
-            <div className="w-full flex flex-col justify-center items-center h-80">
-              <div>You aren't registered for any events.</div>
-              <Link href="/dashboard/events">
-                <button className="px-3 py-2 bg-red-500 my-4 rounded">
-                  Explore Upcoming Events
-                </button>
-              </Link>
-            </div>
+            <>
+              {registeredEvents?.length ? (
+                <EventGrid events={registeredEvents.slice(0, eventsToShow)} />
+              ) : (
+                <div className="w-full flex flex-col justify-center items-center h-80">
+                  <div>You aren't registered for any events.</div>
+                  <Link href="/dashboard/events">
+                    <button className="px-3 py-2 bg-red-500 hover:bg-red-400 my-4 rounded">
+                      Explore Upcoming Events
+                    </button>
+                  </Link>
+                </div>
+              )}
+            </>
           )}
           {registeredEvents?.length > eventsToShow && (
             <div className="w-full flex justify-center items-end ">
@@ -43,7 +50,7 @@ export default function MyRaces() {
           )}
         </section>
         <section className="border-b">
-          <h1>My Past Events</h1>
+          <h1 className="mt-3 text-3xl xl:text-4xl">My Past Events</h1>
           {completedEvents?.length ? (
             <EventGrid events={completedEvents.slice(0, eventsToShow)} />
           ) : (
@@ -81,7 +88,7 @@ function Header() {
       }}
     >
       <div className="bg-dark-100/[0.7] w-full h-full flex flex-col items-center justify-center ">
-        <h1 className="my-3 text-center text-2xl lg:text-4xl xl:text-5xl w-fit">
+        <h1 className="my-3 text-center text-4xl lg:text-4xl xl:text-5xl w-fit">
           My Races
         </h1>
       </div>
