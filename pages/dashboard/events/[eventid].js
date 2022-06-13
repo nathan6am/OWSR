@@ -18,6 +18,7 @@ import toast from "react-hot-toast";
 import CancelDialog from "@/components/modalContent/CancelDialog";
 import SessionTabs from "@/components/dashboard/SessionTabs";
 import { icons } from "react-icons";
+import GameLogo from "@/components/GameLogo";
 
 export default function EventDetails({ eventid }) {
   const { data: userData } = useCurrentUser();
@@ -288,12 +289,12 @@ function Header({ event, onRegister, registered, onCancelRegister, loading }) {
                 >{`${event.emptySlots}/${event.details.gridSize}`}</span>
               </h2>
             </div>
-
-            <img
+            <GameLogo
               className="sm:absolute sm:bottom-2 sm:right-4 my-3"
-              src="/images/AC-logo.png"
               width="200"
+              game={event.game}
             />
+
             <RegisterButton
               loading={loading}
               event={event}

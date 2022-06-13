@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
-import EventCard from "./EventCard";
+import EventCard from "./EventCardPublic";
 import Link from "next/link";
 import { motion, useAnimation } from "framer-motion";
 import { useInView } from "react-intersection-observer";
+import EventCardPublic from "./EventCardPublic";
 export default function EventsCarousel({ events }) {
   const animation = useAnimation();
   const { ref, inView } = useInView();
@@ -77,7 +78,7 @@ export default function EventsCarousel({ events }) {
                 variants={child}
                 className="flex"
               >
-                <EventCard event={event} />
+                <EventCardPublic event={event} />
               </motion.li>
             );
           })}

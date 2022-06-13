@@ -7,14 +7,24 @@ const handler = nc();
 handler.use(...auths);
 handler
   .get(async (req, res) => {
-    const { page, limit } = req.query;
+    const { page, limit, filters } = req.query;
+
     try {
-      if (req.body?.filters) {
-        const result = await db.getEvents(req.body?.filters, page, limit);
-        res.status(200).json({ success: true, events: result.docs });
+      if (filters) {
+        const result = await db.getEvents(JSON.parse(filters), page, limit);
+        console.log(result);
+        res.status(200).json({
+          success: true,
+          events: result.docs,
+          hasNextPage: result.hasNextPage,
+        });
       } else {
         const result = await db.getEvents(null, page, limit);
-        res.status(200).json({ success: true, events: result.docs });
+        res.status(200).json({
+          success: true,
+          events: result.docs,
+          hasNextPage: result.hasNextPage,
+        });
       }
     } catch (error) {
       console.error(error.message);

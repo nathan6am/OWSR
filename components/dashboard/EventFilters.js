@@ -49,13 +49,35 @@ const setupOptions = [
 ];
 
 import { Listbox } from "@headlessui/react";
-export default function EventFilters({ setQuery }) {
+export default function EventFilters({
+  onClearSearch,
+  onUpdateSearch,
+  resultsLoading,
+  filters,
+}) {
   const [expanded, setExpanded] = useState(false);
   const [selectedEventTypes, setSelectedEventTypes] = useState(eventTypes);
   const [selectedSetups, setSelectedSetups] = useState(setupOptions);
   const [selectedMods, setSelectedMods] = useState(modOptions[2]);
   const [selectedSort, setSelectedSort] = useState(sortOptions[0]);
   const [selectedGames, setSelectedGames] = useState(games);
+  const getFilters = () => {
+    return {
+      eventType: selectedEventTypes.map((option) => option.value),
+      setup: selectedSetups.map((option) => option.value),
+      game: selectedGames.map((option) => option.value),
+      mods: selectedMods.value,
+      sort: selectedSort.value,
+    };
+  };
+  const clearSearch = () => {
+    setSelectedSort(sortOptions[0]);
+    setSelectedMods(modOptions[2]);
+    setSelectedEventTypes(eventTypes);
+    setSelectedGames(games);
+    setSelectedSetups(setupOptions);
+    onClearSearch();
+  };
   return (
     <div className="py-5 border-b relative">
       <div className="flex flex-col justify-between">
@@ -76,9 +98,14 @@ export default function EventFilters({ setQuery }) {
             >
               Show Filters <MdOutlineExpandMore className="inline " />
             </button>
-            <button className="text-white w-fit bg-red-500/[0.4] hover:bg-red-500/[0.6] rounded p-2 px-4 ml-4 flex flex-row items-center mb-2 sm:mb-0">
-              Clear Search <MdClose className="inline ml-2" />
-            </button>
+            {filters && (
+              <button
+                onClick={clearSearch}
+                className="text-white w-fit bg-red-500/[0.4] hover:bg-red-500/[0.6] rounded p-2 px-4 ml-4 flex flex-row items-center mb-2 sm:mb-0"
+              >
+                Clear Search <MdClose className="inline ml-2" />
+              </button>
+            )}
           </div>
         </div>
         <div
@@ -112,7 +139,12 @@ export default function EventFilters({ setQuery }) {
             expanded ? "flex" : "hidden"
           } flex-row items-center justify-between pt-5`}
         >
-          <button className="text-white bg-dark-400 hover:bg-dark-500 rounded p-2 px-4  flex flex-row items-center sm:mb-0">
+          <button
+            onClick={() => {
+              onUpdateSearch(getFilters());
+            }}
+            className="text-white bg-dark-400 hover:bg-dark-500 rounded p-2 px-4  flex flex-row items-center sm:mb-0"
+          >
             Update Search <MdSearch className="inline ml-2 text-xl" />
           </button>
           <button

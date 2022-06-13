@@ -88,9 +88,7 @@ function Header() {
       }}
     >
       <div className="bg-dark-100/[0.7] w-full h-full flex flex-col items-center justify-center ">
-        <h1 className="my-3 text-center text-4xl lg:text-4xl xl:text-5xl w-fit">
-          My Races
-        </h1>
+        <h1 className="dashboard-header">My Races</h1>
       </div>
     </div>
   );

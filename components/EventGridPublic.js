@@ -1,5 +1,5 @@
 import React from "react";
-import EventCard from "@/components/dashboard/EventCard";
+import EventCardPublic from "@/components//EventCardPublic";
 import Link from "next/link";
 
 export default function EventGrid({ events }) {
@@ -14,7 +14,7 @@ export default function EventGrid({ events }) {
               id={event._id}
             >
               <li className="flex">
-                <EventCard event={event} />
+                <EventCardPublic event={event} />
               </li>
             </Link>
           );

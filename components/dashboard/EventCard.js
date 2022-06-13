@@ -5,7 +5,7 @@ import { BsFillCalendar2WeekFill } from "react-icons/bs";
 import { FaTrophy } from "react-icons/fa";
 import { DateTime } from "luxon";
 import ReactTooltip from "react-tooltip";
-
+import GameLogo from "../GameLogo";
 export default function EventCard({ event }) {
   function formatTimer(val) {
     const string = `${val}`;
@@ -58,9 +58,10 @@ export default function EventCard({ event }) {
         </div>
 
         <EventIcon eventType={event.type} />
-        <img
+
+        <GameLogo
           className="absolute bottom-2 right-2"
-          src="/images/AC-logo.png"
+          game={event.game}
           width="150"
         />
       </div>
@@ -85,7 +86,7 @@ function EventIcon({ eventType }) {
         <IoStar
           data-tip="Special Event"
           className="absolute top-2 right-2 text-red-500"
-          size="2rem"
+          size="30px"
         />
       );
     case "weekly":
@@ -94,7 +95,7 @@ function EventIcon({ eventType }) {
           data-tip="Weekly Race"
           data-event-off="mouse-leave"
           className="absolute top-2 right-2 text-red-500"
-          size="2rem"
+          size="30px"
         />
       );
     case "championship":
@@ -102,19 +103,14 @@ function EventIcon({ eventType }) {
         <FaTrophy
           data-tip="Championship Race"
           className="absolute top-2 right-2 text-red-500"
-          size="2rem"
+          size="30px"
         />
       );
     case "hotlap":
       return (
-        <FaTrophy
-          className="absolute top-2 right-2 text-red-500"
-          size="2.5rem"
-        />
+        <FaTrophy className="absolute top-2 right-2 text-red-500" size="30px" />
       );
     default:
       return null;
   }
 }
-
-function GameLogo({ game }) {}

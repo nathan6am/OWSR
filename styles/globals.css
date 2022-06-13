@@ -17,6 +17,9 @@
   .btn-social {
     @apply py-3 px-5 w-[100%] items-center my-3 mx-3 justify-center text-center text-white rounded-md flex flex-row;
   }
+  .dashboard-header {
+    @apply my-3 text-center text-4xl lg:text-4xl xl:text-5xl w-fit;
+  }
 }
 
 :root {
@@ -106,4 +109,14 @@ a {
   position: absolute;
   width: 2rem;
   height: 2rem;
+}
+
+.image-gradient {
+  background: rgb(18, 18, 18);
+  background: linear-gradient(
+    0deg,
+    rgba(18, 18, 18, 0.9) 0%,
+    rgba(18, 18, 18, 0.4) 50%,
+    rgba(18, 18, 18, 0.6) 100%
+  );
 }

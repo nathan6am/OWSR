@@ -14,6 +14,8 @@ export default function AddTrackForm() {
     isMod: false,
     isFree: true,
     image: "",
+    corners: "",
+    length: "",
     game: "assetto-corsa",
     link: "",
   };
