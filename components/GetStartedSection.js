@@ -148,8 +148,8 @@ export default function GetStartedSection() {
               className="group-hover:scale-110 transition-all ease-in-out duration-[500]"
             />
             <p className="text-white text-left md:mx-5 lg:mx-10 my-3 group-hover:text-red-300">
-              Take a look at our rules and FAQs. OWSR's rules and moderation aim
-              to provide competetive, clean, and fair racing
+              Take a look at our rules and FAQs. OWSR&aposs rules and moderation
+              aim to provide competetive, clean, and fair racing
             </p>
           </div>
         </motion.li>
@@ -160,8 +160,8 @@ export default function GetStartedSection() {
               className="group-hover:scale-110 transition-all ease-in-out duration-[500]"
             />
             <p className="text-white text-left md:mx-5 lg:mx-10 my-3 group-hover:text-red-300">
-              Take a look at our rules and FAQs. OWSR's rules and moderation aim
-              to provide competetive, clean, and fair racing
+              Explore the driver dashboard, sign up for some events, and hit the
+              track!
             </p>
           </div>
         </motion.li>
