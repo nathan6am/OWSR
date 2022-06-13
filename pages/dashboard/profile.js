@@ -44,6 +44,7 @@ export default function DriverProfile() {
               <MdEmail className="inline text-xl mr-3" />
               {user?.email}
             </p>
+            <p>OSWR Rating: {user?.rating || 1500}</p>
           </section>
           <section className="bg-dark-200">
             <div className="grid grid-cols-1 sm:grid-cols-3">
@@ -60,6 +61,10 @@ export default function DriverProfile() {
                 <h2>Pole Positions: 0</h2>
               </div>
             </div>
+          </section>
+          <section className="w-full bd-dark-200 p-8">
+            <h2>Stats</h2>
+            <p>Stats Placeholder</p>
           </section>
         </main>
       )}

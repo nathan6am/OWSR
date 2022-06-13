@@ -13,10 +13,22 @@ import { useCurrentUser } from "@/hooks/useCurrentUser";
 //util
 import { fetcher } from "@/lib/fetcher";
 import { showSignIn, showCompleteProfile } from "@/lib/util/navigateModal";
+import * as Yup from "yup";
 
 export default function SignUpContent() {
   const { data: { user } = {}, mutate, isValidating } = useCurrentUser();
   const router = useRouter();
+
+  const Schema = Yup.object().shape({
+    email: Yup.string().email("Please enter a valid email adress"),
+    password: Yup.string()
+      .required("This field is required")
+      .min(6, "Password must be at least 6 characters"),
+    confirmPassword: Yup.string().when("password", {
+      is: (val) => (val && val.length > 0 ? true : false),
+      then: Yup.string().oneOf([Yup.ref("password")], "Passwords do not match"),
+    }),
+  });
 
   // Handle Redirects if user profile is incomplete or user is already logged in
   useEffect(() => {
@@ -72,63 +84,70 @@ export default function SignUpContent() {
         width={200}
       ></img>
       <h1 className="text-red-700 text-center text-xl mb-3">SIGN UP</h1>
+
       <Formik
         initialValues={{
           email: "",
           password: "",
           confirmPassword: "",
         }}
+        validationSchema={Schema}
         onSubmit={onSubmit}
       >
-        <Form>
-          <div className="flex flex-col justify-center items-center">
-            <label htmlFor="email" className="input-label">
-              Email:
-            </label>
-            <Field
-              id="email"
-              name="email"
-              placeholder="Email"
-              type="email"
-              className="input-field"
-            />
-
-            <label htmlFor="password" className="input-label">
-              Password:
-            </label>
-            <Field
-              id="password"
-              name="password"
-              type="password"
-              placeholder="Choose a password"
-              className="input-field"
-            />
-            <label htmlFor="confirmPassword" className="input-label">
-              Confirm Password:
-            </label>
-            <Field
-              id="confirmPassword"
-              name="confirmPassword"
-              type="password"
-              placeholder="Re-enter password"
-              className="input-field"
-            />
-            <p className="text-red-700 w-full text-left font-bold">
-              {errorMessage}
-            </p>
-            <button
-              type="submit"
-              className=" px-5 w-[50%] py-2 my-3 mx-3 text-white bg-red-700 flex justify-center  items-center hover:bg-red-500/[0.8] rounded-md"
-            >
-              {!loading ? (
-                <div className="text-center my-1">Continue</div>
-              ) : (
-                <ClipLoader color="white" size="32px" />
-              )}
-            </button>
-          </div>
-        </Form>
+        {({ errors, touched }) => (
+          <Form>
+            <div className="flex flex-col justify-center items-center">
+              <label htmlFor="email" className="input-label">
+                Email:
+              </label>
+              <Field
+                id="email"
+                name="email"
+                placeholder="Email"
+                type="email"
+                className="input-field"
+              />
+              <p className="mx-5 text-red-700">{errors.email}</p>
+              <label htmlFor="password" className="input-label">
+                Password:
+              </label>
+              <Field
+                id="password"
+                name="password"
+                type="password"
+                placeholder="Choose a password"
+                className="input-field"
+              />
+              <p className="mx-5 text-red-700">{errors.password}</p>
+              <label htmlFor="confirmPassword" className="input-label">
+                Confirm Password:
+              </label>
+              <Field
+                id="confirmPassword"
+                name="confirmPassword"
+                type="password"
+                placeholder="Re-enter password"
+                className="input-field"
+              />
+              <p className="mx-5 text-red-700">{errors.confirmPassword}</p>
+              <p className="text-red-700 w-full text-left font-bold">
+                {errorMessage}
+              </p>
+              <button
+                type="submit"
+                className=" px-5 w-[50%] py-2 my-3 mx-3 text-white bg-red-700 flex justify-center  items-center hover:bg-red-500/[0.8] rounded-md"
+              >
+                {!loading ? (
+                  <div className="text-center my-1">Continue</div>
+                ) : (
+                  <ClipLoader color="white" size="32px" />
+                )}
+              </button>
+            </div>
+          </Form>
+        )}
       </Formik>
+
       <p className="text-white/[0.8] text-center text-lg m-3">OR</p>
       <hr className="mx-10 mb-3"></hr>
       <div className="flex flex-col items-center w-full">

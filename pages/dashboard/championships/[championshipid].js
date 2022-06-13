@@ -1,8 +1,11 @@
 import React from "react";
 
+//components
 import Loading from "@/components/Loading";
 import ChampTabs from "@/components/dashboard/ChampTabs";
 import GameLogo from "@/components/GameLogo";
+import ErrorMessage from "@/components/ErrorMessage";
+
 //hooks
 import useSWR from "swr";
 
@@ -17,16 +20,22 @@ export default function ChampionshipDetails({ championshipid }) {
   const championship = data && data.championship;
   return (
     <>
-      {!data ? (
-        <div className="min-h-screen flex justify-center items-center">
-          <Loading />
-        </div>
+      {error ? (
+        <ErrorMessage />
       ) : (
         <>
-          <ChampBanner championship={championship} />
-          <section className="container">
-            <ChampTabs championship={championship} />
-          </section>
+          {!data ? (
+            <div className="min-h-screen flex justify-center items-center">
+              <Loading />
+            </div>
+          ) : (
+            <>
+              <ChampBanner championship={championship} />
+              <section className="container">
+                <ChampTabs championship={championship} />
+              </section>
+            </>
+          )}
         </>
       )}
     </>

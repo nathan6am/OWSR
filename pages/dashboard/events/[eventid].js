@@ -15,7 +15,7 @@ import toast from "react-hot-toast";
 import CancelDialog from "@/components/CancelDialog";
 import SessionTabs from "@/components/dashboard/SessionTabs";
 import GameLogo from "@/components/GameLogo";
-
+import ErrorMessage from "@/components/ErrorMessage";
 //hooks
 import useSWR from "swr";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
@@ -63,37 +63,43 @@ export default function EventDetails({ eventid }) {
 
   return (
     <>
-      {!data ? (
-        <div className="min-h-screen flex justify-center items-center">
-          <Loading />
-        </div>
+      {error ? (
+        <ErrorMessage />
       ) : (
         <>
-          <CancelDialog
-            isOpen={cancelDialogOpen}
-            setIsOpen={setCancelDialogOpen}
-            message="Are you sure you want to cancel your registration?"
-            title="Cancel Registraion"
-            onCancel={onCancelRegister}
-          />
-          <Header
-            event={event}
-            onRegister={onRegister}
-            onCancelRegister={() => setCancelDialogOpen(true)}
-            registered={registered}
-            loading={regLoading}
-          />
-          <div className="container py-8 ">
-            <h2 className="text-2xl py-3">Event Info</h2>
-            <div className="grid grid-cols-1  xl:grid-cols-4 gap-4">
-              <ContentCard cars={event.cars} track={event.track} />
-              <div className="lg:col-span-2 lg:flex lg:flex-row justify-between">
-                <DetailsCard details={event.details} />
-                <WeatherCard weather={event.details.weather} />
-              </div>
+          {!data ? (
+            <div className="min-h-screen flex justify-center items-center">
+              <Loading />
             </div>
-            <SessionTabs sessions={event.sessions} />
-          </div>
+          ) : (
+            <>
+              <CancelDialog
+                isOpen={cancelDialogOpen}
+                setIsOpen={setCancelDialogOpen}
+                message="Are you sure you want to cancel your registration?"
+                title="Cancel Registraion"
+                onCancel={onCancelRegister}
+              />
+              <Header
+                event={event}
+                onRegister={onRegister}
+                onCancelRegister={() => setCancelDialogOpen(true)}
+                registered={registered}
+                loading={regLoading}
+              />
+              <div className="container py-8 ">
+                <h2 className="text-2xl py-3">Event Info</h2>
+                <div className="grid grid-cols-1  xl:grid-cols-4 gap-4">
+                  <ContentCard cars={event.cars} track={event.track} />
+                  <div className="lg:col-span-2 lg:flex lg:flex-row justify-between">
+                    <DetailsCard details={event.details} />
+                    <WeatherCard weather={event.details.weather} />
+                  </div>
+                </div>
+                <SessionTabs sessions={event.sessions} />
+              </div>
+            </>
+          )}
         </>
       )}
     </>

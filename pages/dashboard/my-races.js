@@ -52,7 +52,7 @@ export default function MyRaces() {
                 onClick={() => {
                   setEventsToShow(eventsToShow + 6);
                 }}
-                className="px-3 py-2 rounded bg-red-500 hover:bg-red-400 w-fit"
+                className="px-3 py-2 rounded bg-red-500 hover:bg-red-400 w-fit mb-5"
               >
                 Show more
               </button>
@@ -74,7 +74,7 @@ export default function MyRaces() {
                 onClick={() => {
                   setPastEventsToShow(eventsToShow + 6);
                 }}
-                className="px-3 py-2 rounded bg-red-500 hover:bg-red-400 w-fit"
+                className="px-3 py-2 rounded bg-red-500 hover:bg-red-400 w-fit mb-5"
               >
                 Show more
               </button>

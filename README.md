@@ -1,34 +1,32 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+## OWSR Sim Racing Portal for Managed Events
 
-## Getting Started
+This project is intended to be an online portal to allow users to sign up and participate seamlessly in managed and curated online simracing events
 
-First, run the development server:
+The project is still in development and is largely a proof of concept at the moment but a lot of the majot functionaliy is already in place
 
-```bash
-npm run dev
-# or
-yarn dev
-```
+## Authentication
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Authentication is done via Passport and next-session - User and session data is stored in a mongodb database
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+Email verification and reset password logic, as well as the discord authentications strategy are still WIP
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
+The Use Demo Profile button on the auth modals automatically logs into to a fake demo account via credentials, but the regular sign-up sign in flow with email/password and steam is fully functional
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+## User Dashboard
 
-## Learn More
+The user dashboard was the primary focus of this project. The concept is to allow users to sign up and manage their events, get server info, view results, file protests etc.
 
-To learn more about Next.js, take a look at the following resources:
+## Event Search
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+There are a number of fake events already listed in the database to test the event search, dynamic details, and event registration functionality
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+Most data fetching on the dashboard is done with useSWR results cacheing, with the exception of the event search to more easily manage changing search filters and infinite loading
 
-## Deploy on Vercel
+## API Routes
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+This project utilizes Next.js serverless architecture with built in api-routing
+The api routes use custom session/authentication middleware to verify user and admin specific routes
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+The majority of crud operations are called from the /lib/db/dbFunctions file which utilizes a cached connection to the database and the Mongoose mongodb wrapper
+
+## TODO LIST

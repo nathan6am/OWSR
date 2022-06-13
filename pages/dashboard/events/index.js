@@ -99,11 +99,14 @@ export default function Events() {
           setFilters={setFilters}
         />
         {resultsLoading ? <Loading /> : <EventGrid events={events} />}
-        <div className="text-center">
+        <div className="text-center mb-5">
           {reachedEnd ? (
             <p>No more events to show</p>
           ) : (
-            <button onClick={onLoadMore}>
+            <button
+              className="mb-5 text-red-400 hover:text-red-300 underline"
+              onClick={onLoadMore}
+            >
               {loadingMore ? "loading" : "Load more"}
             </button>
           )}

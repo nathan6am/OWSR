@@ -94,9 +94,12 @@ export default function Events() {
 
         <div className="text-center">
           {reachedEnd ? (
-            <p>No more events to show</p>
+            <p className="mb-5">No more events to show</p>
           ) : (
-            <button onClick={onLoadMore}>
+            <button
+              className="mb-5 text-red-400 underline hover:text-red-300"
+              onClick={onLoadMore}
+            >
               {loadingMore ? "loading" : "Load more"}
             </button>
           )}
