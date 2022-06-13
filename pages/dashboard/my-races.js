@@ -36,7 +36,7 @@ export default function MyRaces() {
                 <EventGrid events={registeredEvents.slice(0, eventsToShow)} />
               ) : (
                 <div className="w-full flex flex-col justify-center items-center h-80">
-                  <div>You aren't registered for any events.</div>
+                  <div>You aren&apost registered for any events.</div>
                   <Link href="/dashboard/events">
                     <button className="px-3 py-2 bg-red-500 hover:bg-red-400 my-4 rounded">
                       Explore Upcoming Events
@@ -65,7 +65,7 @@ export default function MyRaces() {
             <EventGrid events={completedEvents.slice(0, eventsToShow)} />
           ) : (
             <div className="w-full flex flex-col justify-center items-center h-80">
-              <div>You haven't particpated in any races yet.</div>
+              <div>You haven&apost particpated in any races yet.</div>
             </div>
           )}
           {completedEvents?.length > pastEventsToShow && (
