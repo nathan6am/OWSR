@@ -138,9 +138,34 @@ export default function SignInContent() {
       <p className="text-white/[0.8] text-center text-lg m-3">OR</p>
       <hr className="mx-10 mb-3"></hr>
       <div className="flex flex-col items-center w-full">
-        <button className="btn-social bg-discord-200 hover:bg-discord-100 ">
-          <FaDiscord size="20px" className="mr-2" />
-          Sign In With Discord
+        <button
+          onClick={async () => {
+            setLoading(true);
+            try {
+              const response = await fetcher("/api/auth/credentials", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                  email: "test@test.com",
+                  password: "123456",
+                }),
+              });
+              if (!response.user) {
+                setLoginFailed(true);
+              } else {
+                setLoginFailed(false);
+                //Automatically update the cached user upon success response
+                mutate({ user: response.user }, false);
+              }
+            } catch (e) {
+              setLoginFailed(true);
+            } finally {
+              setLoading(false);
+            }
+          }}
+          className="btn-social bg-green-500 hover:bg-green-600 "
+        >
+          Use Demo Profile
         </button>
       </div>
       <div className="flex flex-col items-center w-full">
@@ -152,7 +177,7 @@ export default function SignInContent() {
         </Link>
       </div>
       <p className="text-center text-red-700 mt-6 mb-1">
-        Don&apost have an account?{" "}
+        {`Don't have an account?`}
       </p>
       <button
         onClick={() => {
