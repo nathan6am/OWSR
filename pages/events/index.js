@@ -65,7 +65,7 @@ export default function Events() {
         }
       );
       setEvents((events) => [...events, ...res.data.events]);
-      console.log(res.data.hasNextPage);
+      setReachedEnd(!res.data.hasNextPage);
       setLoadingMore(false);
       setPage(page + 1);
     } catch (error) {}
@@ -91,9 +91,16 @@ export default function Events() {
           setFilters={setFilters}
         />
         {resultsLoading ? <Loading /> : <EventGridPublic events={events} />}
-        <button onClick={onLoadMore}>
-          {loadingMore ? "loading" : "Load more"}
-        </button>
+
+        <div className="text-center">
+          {reachedEnd ? (
+            <p>No more events to show</p>
+          ) : (
+            <button onClick={onLoadMore}>
+              {loadingMore ? "loading" : "Load more"}
+            </button>
+          )}
+        </div>
       </main>
     </div>
   );

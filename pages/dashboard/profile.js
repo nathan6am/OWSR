@@ -2,14 +2,20 @@ import React, { useEffect } from "react";
 
 //components
 import Loading from "@/components/Loading";
+import { MdEmail } from "react-icons/md";
+import { IoMdPodium } from "react-icons/io";
+import { FaMedal } from "react-icons/fa";
+import { RiTimerFill } from "react-icons/ri";
 
 //hooks
 import { useProfile } from "hooks/useProfile";
 import { useRouter } from "next/router";
+import { useCurrentUser } from "@/hooks/useCurrentUser";
 
 export default function DriverProfile() {
   const { data, error, mutate, isValidating } = useProfile();
   const router = useRouter();
+
   useEffect(() => {
     if (!data && !error) return;
     if (!data.user) {
@@ -23,7 +29,7 @@ export default function DriverProfile() {
       {isValidating ? (
         <Loading />
       ) : (
-        <main className="container bg-dark-300">
+        <main className="container bg-dark-300 px-0">
           <section className="p-8">
             <div className="flex flex-row ">
               <img
@@ -34,7 +40,26 @@ export default function DriverProfile() {
               />
               <h2>{user?.name}</h2>
             </div>
-            <p>{user?.email}</p>
+            <p>
+              <MdEmail className="inline text-xl mr-3" />
+              {user?.email}
+            </p>
+          </section>
+          <section className="bg-dark-200">
+            <div className="grid grid-cols-1 sm:grid-cols-3">
+              <div className="flex flex-col w-full p-8 items-center justify-center">
+                <FaMedal size={90} />
+                <h2>Wins: 0</h2>
+              </div>
+              <div className="flex flex-col w-full p-8 items-center justify-center">
+                <IoMdPodium size={100} />
+                <h2>Podiums: 0</h2>
+              </div>
+              <div className="flex flex-col w-full p-8 items-center justify-center">
+                <RiTimerFill size={90} />
+                <h2>Pole Positions: 0</h2>
+              </div>
+            </div>
           </section>
         </main>
       )}

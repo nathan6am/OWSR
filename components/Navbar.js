@@ -33,59 +33,95 @@ export default function Navbar() {
   return (
     <>
       <nav
-        className={`relative flex flex-wrap items-center justify-between px-2 py-5 ${
+        className={`relative flex min-h-[85px] flex-wrap items-center justify-between px-2 py-5 ${
           navScroll || router.pathname !== "/"
             ? "bg-dark-100"
             : "bg-dark-100 lg:bg-transparent"
         } mb-3 transition-all ease-in-out duration-300`}
       >
         <div className="container px-2 xl:px-5">
-          <div className="flex flex-row items-center justify-between">
+          <div className="flex flex-row items-center justify-between ">
             <button
-              className="lg:hidden text-white hover:opacity-75"
+              className="lg:hidden text-white hover:opacity-75 absolute top-7 left-7"
               onClick={() => {
                 setNavbarOpen(!navbarOpen);
               }}
             >
               <GiHamburgerMenu size={30} />
             </button>
-            <div className=" flex-row items-center hidden lg:flex">
-              <Link href="/">
-                <img
-                  className="mr-6 xl:mr-10"
-                  alt="OWSR"
-                  src="/images/logo.png"
-                  style={{ height: 50 }}
-                />
-              </Link>
-              <ul className="flex flex-row items-center uppercase">
+            <div
+              className={`${
+                navbarOpen ? "flex" : "hidden lg:flex"
+              } lg:flex-row flex-col items-center mt-[60px] lg:mt-0`}
+            >
+              <div className="hidden lg:flex">
+                <Link href="/">
+                  <img
+                    className="mr-6 xl:mr-10"
+                    alt="OWSR"
+                    src="/images/logo.png"
+                    style={{ height: 50 }}
+                  />
+                </Link>
+              </div>
+              <ul
+                className={`${
+                  navbarOpen ? "flex" : "hidden lg:flex"
+                }  flex-col lg:flex-row lg:items-center uppercase`}
+              >
                 <li
-                  className={
-                    router.pathname == "/"
-                      ? `text-red-700 font-lg mx-3 border-bottom`
-                      : `text-white hover:text-red-500 mx-3`
-                  }
+                  className={`my-1 ${
+                    router.pathname === "/"
+                      ? "text-red-700 font-lg mx-2 border-bottom"
+                      : "nav-li"
+                  }`}
                 >
                   <Link href="/">Home</Link>
                 </li>
                 <li
-                  className={
+                  className={` my-1 ${
                     router.pathname.startsWith("/events")
-                      ? "text-red-700 font-lg mx-3 border-bottom"
+                      ? "text-red-700 font-lg mx-2 border-bottom"
                       : "nav-li"
-                  }
+                  }`}
                 >
                   <Link href="/events">Events</Link>
                 </li>
-                <li className="nav-li">
-                  <Link href="/events">Championships</Link>
+                <li
+                  className={` my-1 ${
+                    router.pathname.startsWith("/championships")
+                      ? "text-red-700 font-lg mx-2 border-bottom"
+                      : "nav-li"
+                  }`}
+                >
+                  <Link href="/championships">Championships</Link>
                 </li>
-                <li className="nav-li">
-                  <Link href="/events">Results</Link>
+                <li
+                  className={` my-1 ${
+                    router.pathname.startsWith("/results")
+                      ? "text-red-700 font-lg mx-2 border-bottom"
+                      : "nav-li"
+                  }`}
+                >
+                  <Link href="/results">Results</Link>
                 </li>
-                <li className="nav-li">
-                  <Link href="/events">About</Link>
+                <li
+                  className={` my-1 ${
+                    router.pathname.startsWith("/about")
+                      ? "text-red-700 font-lg mx-2 border-bottom"
+                      : "nav-li"
+                  }`}
+                >
+                  <Link href="/about">About</Link>
                 </li>
+                <button
+                  className="lg:hidden  my-4 mx-2 text-red-700 px-4 py-3 uppercase rounded-md border border-red-700 hover:border-red-700 hover:text-white hover:bg-red-500/[0.5]"
+                  onClick={() => {
+                    showSignIn(router);
+                  }}
+                >
+                  Sign In
+                </button>
               </ul>
             </div>
             <div className="flex flex-row items-center">
@@ -112,7 +148,7 @@ export default function Navbar() {
                 </li>
               </ul>
               <button
-                className="text-red-700 px-4 py-3 uppercase rounded-md border border-red-700 hover:border-red-700 hover:text-white hover:bg-red-500/[0.5]"
+                className="hidden lg:inline-block text-red-700 px-4 py-3 uppercase rounded-md border border-red-700 hover:border-red-700 hover:text-white hover:bg-red-500/[0.5]"
                 onClick={() => {
                   showSignIn(router);
                 }}

@@ -86,7 +86,7 @@ function ChampBanner({ championship }) {
               width="200"
               game={championship.game}
             />
-            <Link href={`/dashboard/championships/${championship._id}}`}>
+            <Link href={`/dashboard/championships/${championship._id}`}>
               <button className="bg-green-500 px-4 py-3  hover:bg-green-400 rounded">
                 Learn More
               </button>

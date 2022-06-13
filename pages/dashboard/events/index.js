@@ -50,6 +50,7 @@ export default function Events() {
       const res = await axios.get(`/api/events?page=1&&limit=${PAGE_SIZE}`);
       setEvents(res.data.events);
       setResultsLoading(false);
+
       setReachedEnd(!res.data.hasNextPage);
     } catch (error) {
       console.error(error);
@@ -68,7 +69,7 @@ export default function Events() {
         }
       );
       setEvents((events) => [...events, ...res.data.events]);
-      console.log(res.data.hasNextPage);
+      setReachedEnd(!res.data.hasNextPage);
       setLoadingMore(false);
       setPage(page + 1);
     } catch (error) {
@@ -98,9 +99,15 @@ export default function Events() {
           setFilters={setFilters}
         />
         {resultsLoading ? <Loading /> : <EventGrid events={events} />}
-        <button onClick={onLoadMore}>
-          {loadingMore ? "loading" : "Load more"}
-        </button>
+        <div className="text-center">
+          {reachedEnd ? (
+            <p>No more events to show</p>
+          ) : (
+            <button onClick={onLoadMore}>
+              {loadingMore ? "loading" : "Load more"}
+            </button>
+          )}
+        </div>
       </main>
     </>
   );

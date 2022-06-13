@@ -13,6 +13,7 @@ import {
 
 //componenets
 import Link from "next/link";
+import ReactTooltip from "react-tooltip";
 
 //hooks
 import { useRouter } from "next/router";
@@ -111,7 +112,8 @@ export default function Sidebar({ signOut, toggle, collapse }) {
           />
           <p>{user?.name}</p>
         </div>
-        <button onClick={signOut}>
+        <ReactTooltip effect="solid" place="right" />
+        <button data-tip="Logout" onClick={signOut}>
           <MdLogout className="hover:opacity-75" size="30px" />
         </button>
       </div>

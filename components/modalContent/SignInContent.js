@@ -30,6 +30,7 @@ export default function SignInContent() {
   useEffect(() => {
     if (isValidating) return;
     if (user && !user.registered) {
+      //show[page] functions take router as arg to append query to url for contextual routing of modal
       showCompleteProfile(router);
     } else if (user && user.registered && !user.linked) {
       showLinkSteam(router);

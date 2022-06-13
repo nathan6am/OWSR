@@ -6,83 +6,35 @@ import { FaTrophy, FaDollarSign } from "react-icons/fa";
 import { MdDownload, MdCancel, MdOutlineTimer } from "react-icons/md";
 import { ImUnlocked, ImLock } from "react-icons/im";
 import { BsFillCloudSunFill, BsFillCalendar2WeekFill } from "react-icons/bs";
-import { HiPencilAlt } from "react-icons/hi";
-import { FcCancel } from "react-icons/fc";
 
 //components
-import { ClipLoader } from "react-spinners";
-import toast from "react-hot-toast";
-import CancelDialog from "@/components/CancelDialog";
 import SessionTabs from "@/components/dashboard/SessionTabs";
 import GameLogo from "@/components/GameLogo";
+import Link from "next/link";
 
 //hooks
 import useSWR from "swr";
-import { useCurrentUser } from "@/hooks/useCurrentUser";
 import { fetcher } from "@/lib/fetcher";
 import Countdown from "@/components/Countdown";
 import Loading from "@/components/Loading";
 
 //util
 import { DateTime } from "luxon";
-import axios from "axios";
 
 export default function EventDetails({ eventid }) {
-  const { data: userData } = useCurrentUser();
   const { data, mutate, error } = useSWR(`/api/events/${eventid}`, fetcher);
-  const [cancelDialogOpen, setCancelDialogOpen] = useState(false);
-  const [regLoading, setRegLoading] = useState(false);
-  const onRegister = async () => {
-    setRegLoading(true);
-    const res = await axios.post(`/api/events/register/${eventid}`);
-    if (res?.data?.success) {
-      mutate();
 
-      toast.success("Registration Successful");
-    }
-    setRegLoading(false);
-  };
-  const onCancelRegister = async () => {
-    setRegLoading(true);
-    const res = await axios.delete(`/api/events/register/${eventid}`);
-    if (res?.data?.success) {
-      setCancelDialogOpen(false);
-      mutate();
-      toast("Registration Canceled", {
-        icon: <FcCancel size={24} />,
-        duration: 2000,
-      });
-    }
-    setRegLoading(false);
-  };
   const event = data?.event;
-  const registered = data?.event.registeredDrivers.includes(userData?.user._id);
-
-  //TODO: improve waitlist logic/UI
-  const waitlisted = data?.event.waitlist.includes(userData?.user._id);
 
   return (
     <>
       {!data ? (
-        <div className="min-h-screen flex justify-center items-center">
+        <div className="min-h-screen  flex justify-center items-center">
           <Loading />
         </div>
       ) : (
-        <>
-          <CancelDialog
-            isOpen={cancelDialogOpen}
-            setIsOpen={setCancelDialogOpen}
-            message="Are you sure you want to cancel your registration?"
-            title="Cancel Registraion"
-            onCancel={onCancelRegister}
-          />
-          <Header
-            event={event}
-            onRegister={onRegister}
-            onCancelRegister={() => setCancelDialogOpen(true)}
-            registered={registered}
-            loading={regLoading}
-          />
+        <div className="flex flex-col mt-[85px] min-h-screen w-full pb-10">
+          <Header event={event} />
           <div className="container py-8 ">
             <h2 className="text-2xl py-3">Event Info</h2>
             <div className="grid grid-cols-1  xl:grid-cols-4 gap-4">
@@ -94,7 +46,7 @@ export default function EventDetails({ eventid }) {
             </div>
             <SessionTabs sessions={event.sessions} />
           </div>
-        </>
+        </div>
       )}
     </>
   );
@@ -107,8 +59,6 @@ EventDetails.getInitialProps = async ({ query }) => {
     eventid,
   };
 };
-
-EventDetails.layout = "Dashboard";
 
 //Subcomponents for Event Details
 function ContentCard({ cars, track }) {
@@ -261,8 +211,9 @@ function RenderTrack({ track }) {
   );
 }
 
-function Header({ event, onRegister, registered, onCancelRegister, loading }) {
+function Header({ event }) {
   const dt = new DateTime(event.date);
+
   return (
     <div
       className=" w-full bg-cover"
@@ -307,69 +258,15 @@ function Header({ event, onRegister, registered, onCancelRegister, loading }) {
               width="200"
               game={event.game}
             />
-
-            <RegisterButton
-              loading={loading}
-              event={event}
-              onRegister={onRegister}
-              onCancelRegister={onCancelRegister}
-              registered={registered}
-            />
+            <Link href="/?auth=sign-in">
+              <button className="bg-red-500 hover:bg-red-600 shadow px-4 py-4 rounded text-lg h-fit w-fit flex flex-row items-center">
+                Sign In to Register
+              </button>
+            </Link>
           </div>
         </div>
       </div>
     </div>
-  );
-}
-
-function RegisterButton({
-  event,
-  onCancelRegister,
-  onRegister,
-  registered,
-  loading,
-}) {
-  return (
-    <>
-      {registered ? (
-        <>
-          <div>
-            You are registered for this event
-            <button
-              onClick={onCancelRegister}
-              className="flex flex-row w-fit bg-red-500 hover:bg-red-400 my-2 py-2 px-4 rounded items-center"
-            >
-              Cancel Registration
-              <MdCancel className="inline ml-2 text-xl" />
-            </button>
-          </div>
-        </>
-      ) : (
-        <>
-          {event.isFull ? (
-            <button className="bg-yellow-500 hover:bg-yellow-600 shadow px-4 py-4 rounded text-lg h-fit w-fit">
-              {loading ? (
-                <ClipLoader color="white" size="32px" />
-              ) : (
-                "Join the Waitlist"
-              )}
-            </button>
-          ) : (
-            <button
-              onClick={onRegister}
-              className="bg-green-500 hover:bg-green-600 shadow px-4 py-4 rounded text-lg h-fit w-fit flex flex-row items-center"
-            >
-              <p className="mr-2">Register for this Event</p>
-              {loading ? (
-                <ClipLoader color="white" size={24} />
-              ) : (
-                <HiPencilAlt className="inline" size={24} />
-              )}
-            </button>
-          )}
-        </>
-      )}
-    </>
   );
 }
 

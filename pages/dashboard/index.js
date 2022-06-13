@@ -12,7 +12,7 @@ export default function Dashboard() {
     if (!data.user) {
       router.replace("/?auth=sign-in");
     } else {
-      router.replace("/dashboard/profile");
+      router.replace("/dashboard/my-races");
     }
   }, [router, data, error]);
   return <Loading />;
