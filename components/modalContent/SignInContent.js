@@ -146,7 +146,7 @@ export default function SignInContent() {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
-                  email: "test@test.com",
+                  email: "test@test.test",
                   password: "123456",
                 }),
               });
