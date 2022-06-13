@@ -1,17 +1,27 @@
 import React, { useState } from "react";
-import useSWR from "swr";
-import { fetcher } from "@/lib/fetcher";
+
+//components
 import EventGrid from "@/components/dashboard/EventGrid";
 import Link from "next/link";
 import Loading from "@/components/Loading";
+
+//hooks
+import useSWR from "swr";
+
+//util
+import { fetcher } from "@/lib/fetcher";
+
 export default function MyRaces() {
-  const { data, error, mutate, isValidating } = useSWR(
+  const { data, error, isValidating } = useSWR(
     "/api/events/my-events",
     fetcher
   );
+
+  //TODO: Change to infinite loading (like on events main page) instead of prefetching all my-events
   const { registeredEvents, completedEvents } = !isValidating && data.events;
   const [eventsToShow, setEventsToShow] = useState(3);
   const [pastEventsToShow, setPastEventsToShow] = useState(3);
+
   return (
     <div className="min-h-screen">
       <Header />

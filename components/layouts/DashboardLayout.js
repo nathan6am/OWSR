@@ -1,21 +1,33 @@
 import React, { useEffect, useState, useCallback, createContext } from "react";
-import Sidebar from "../Sidebar";
-import { useRouter } from "next/router";
-import { useCurrentUser } from "../../hooks/useCurrentUser";
-import { fetcher } from "@/lib/fetcher";
+
+//icons
 import { GiHamburgerMenu } from "react-icons/gi";
+
+//components
+import Sidebar from "../Sidebar";
 import Loading from "../Loading";
 import { Toaster } from "react-hot-toast";
+
+//hooks
+import { useRouter } from "next/router";
+import { useCurrentUser } from "../../hooks/useCurrentUser";
 import { useMediaQuery } from "@react-hook/media-query";
 
+//util
+import { fetcher } from "@/lib/fetcher";
+
+//create UserContext to pass basic user data to all dashboard pages without loading time
 export const UserContext = createContext();
+
 export default function DashboardLayout({ children }) {
+  const router = useRouter();
   const [verifying, setVerifying] = useState(true);
   const { data: { user } = {}, mutate, isValidating } = useCurrentUser();
+
   const isMobile = useMediaQuery("only screen and (max-width: 640px)");
   const [sidebarCollapsed, setSidebarCollapsed] = useState(isMobile);
 
-  const router = useRouter();
+  //Redirect to the appropriate auth page if the user is not signed in or account setup is incomplete
   useEffect(() => {
     if (isValidating) return;
     if (!user) {
@@ -28,8 +40,9 @@ export default function DashboardLayout({ children }) {
       setVerifying(false);
     }
   }, [user, router, isValidating]);
+
+  //Automatically collapse the sidebar on mobile displays initially and on page navigation
   useEffect(() => {
-    console.log(isMobile);
     if (isMobile) {
       setSidebarCollapsed(true);
     }
@@ -37,13 +50,17 @@ export default function DashboardLayout({ children }) {
   const toggleSidebar = () => {
     setSidebarCollapsed(!sidebarCollapsed);
   };
+
   const onSignOut = useCallback(async () => {
     try {
+      //call auth delete method to destroy session
       await fetcher("/api/auth", {
         method: "DELETE",
       });
       setVerifying(true);
+      //mutate swr user cache to null to delete cached user info
       mutate({ user: null });
+      //redirect to public site
       router.replace("/");
     } catch (e) {
       console.error(e.message);

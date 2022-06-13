@@ -19,6 +19,7 @@ const customDialogStyles = {
     backgroundColor: "rgba(8, 8, 8, 0.4)",
   },
 };
+
 export default function CancelDialog({
   isOpen,
   setIsOpen,

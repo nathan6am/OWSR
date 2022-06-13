@@ -1,22 +1,42 @@
 import React, { useState, useCallback, useRef, useEffect } from "react";
-import Link from "next/link";
-import { Formik, Form, Field, ErrorMessage } from "formik";
+
+//components
+import { Formik, Form, Field } from "formik";
 import { ClipLoader } from "react-spinners";
-import { useRouter } from "next/router";
-import { FaDiscord, FaSteam } from "react-icons/fa";
-import { fetcher } from "@/lib/fetcher";
-import { useCurrentUser } from "@/hooks/useCurrentUser";
-import { showSignIn, showLinkSteam } from "@/lib/util/navigateModal";
 import CountrySelect from "../UI/CountrySelect";
+
+//hooks
+import { useRouter } from "next/router";
+import { useCurrentUser } from "@/hooks/useCurrentUser";
+
+//util
+import { fetcher } from "@/lib/fetcher";
+import { showSignIn, showLinkSteam } from "@/lib/util/navigateModal";
+
 export default function CompleteProfileContent() {
+  const router = useRouter();
   const { data: { user } = {}, mutate, isValidating } = useCurrentUser();
+
+  // Handle Redirects if user profile is incomplete or user is already logged in
+  useEffect(() => {
+    if (isValidating) return;
+    if (!user) {
+      //show[page] functions take router as arg to append query to url for contextual routing of modal
+      showSignIn(router);
+    } else if (user && user.registered && !user.linked) {
+      showLinkSteam(router);
+    } else if (user && user.registered && user.linked) {
+      router.replace("/dashboard");
+    }
+  }, [user, router, isValidating]);
+
   const [countryCode, setCountryCode] = useState("");
   const [loading, setLoading] = useState(false);
-  const router = useRouter();
+
+  //Update user profile via auth/me api route and redirect to link steam
   const onSubmit = useCallback(
     async (values) => {
       setLoading(true);
-
       try {
         const response = await fetcher("/api/users/me", {
           method: "PATCH",
@@ -26,7 +46,6 @@ export default function CompleteProfileContent() {
             country: countryCode,
           }),
         });
-
         if (!response.user) {
           console.log("no user in response");
         } else {

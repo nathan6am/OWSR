@@ -1,11 +1,19 @@
-import React, { useEffect, useState } from "react";
-import { useTimer } from "react-timer-hook";
+import React from "react";
+
+//icons
 import { IoStar } from "react-icons/io5";
 import { BsFillCalendar2WeekFill } from "react-icons/bs";
 import { FaTrophy } from "react-icons/fa";
-import { DateTime } from "luxon";
+
+//components
 import GameLogo from "./GameLogo";
+import Countdown from "./Countdown";
 import Link from "next/link";
+
+//util
+import { DateTime } from "luxon";
+
+//Public version of card for displaying event in grid
 export default function EventCardPublic({ event }) {
   function formatTimer(val) {
     const string = `${val}`;
@@ -17,16 +25,10 @@ export default function EventCardPublic({ event }) {
     }
   }
   const dt = DateTime.fromISO(event.date);
-  const timeUntil = useTimer({
-    expiryTimestamp: new Date(event.date),
-    autoStart: false,
-  });
-  useEffect(() => {
-    timeUntil.start();
-  }, []);
+
   return (
     <Link href={`/events/${event._id}`}>
-      <div className="flex flex-col w-full  rounded shadow-lg bg-dark-200 overflow-hidden group cursor-pointer min-h-[280px] md:min-h-[320px] max-w-[500px] mx-auto">
+      <div className="flex flex-col w-full  rounded shadow-lg bg-dark-300 overflow-hidden group cursor-pointer min-h-[280px] md:min-h-[320px] max-w-[500px] mx-auto">
         <div className="flex-grow overflow-hidden relative">
           <div
             className="w-full h-full group-hover:scale-105 transition-all ease-in-out "
@@ -48,9 +50,7 @@ export default function EventCardPublic({ event }) {
             suppressHydrationWarning={true}
             className="absolute bottom-2 left-2 rounded-md bg-red-700/[0.8] py-2 px-3"
           >
-            {`${timeUntil.days}d ${formatTimer(
-              timeUntil.hours
-            )}h : ${formatTimer(timeUntil.minutes)}min`}
+            <Countdown date={event.date} />
           </div>
 
           <EventIcon eventType={event.type} />

@@ -1,20 +1,25 @@
 import React, { useState, useCallback, useRef, useEffect } from "react";
+
+//components
 import Link from "next/link";
-import { Formik, Form, Field, ErrorMessage } from "formik";
-import { ClipLoader } from "react-spinners";
-import { useRouter } from "next/router";
-import { FaDiscord, FaSteam } from "react-icons/fa";
-import { fetcher } from "@/lib/fetcher";
+import { FaSteam } from "react-icons/fa";
+
+//hooks
 import { useCurrentUser } from "@/hooks/useCurrentUser";
+import { useRouter } from "next/router";
+
+//util
 import { showSignIn, showCompleteProfile } from "@/lib/util/navigateModal";
 
 export default function LinkSteamContent() {
-  // Handle Redirects if user profile is incomplete or user is already logged in
-  const { data: { user } = {}, mutate, isValidating } = useCurrentUser();
   const router = useRouter();
+  const { data: { user } = {}, mutate, isValidating } = useCurrentUser();
+
+  // Handle Redirects if user profile is incomplete or user is already logged in
   useEffect(() => {
     if (isValidating) return;
     if (!user) {
+      //show[page] functions take router as arg to append query to url for contextual routing of modal
       showSignIn(router);
     } else if (user && !user.registered) {
       showCompleteProfile(router);

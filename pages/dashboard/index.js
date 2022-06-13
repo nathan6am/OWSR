@@ -3,6 +3,7 @@ import { useCurrentUser } from "../../hooks/useCurrentUser";
 import { useRouter } from "next/router";
 import Loading from "../../components/Loading";
 
+//Auto redirect
 export default function Dashboard() {
   const { data, error, mutate } = useCurrentUser();
   const router = useRouter();

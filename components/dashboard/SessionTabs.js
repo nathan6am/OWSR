@@ -1,6 +1,6 @@
+//Session tabs for event details page
 import React from "react";
 import { Tab } from "@headlessui/react";
-import { duration } from "moment";
 
 export default function SessionTabs({ sessions }) {
   return (

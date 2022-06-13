@@ -1,10 +1,16 @@
 import React, { useState, useEffect, useCallback } from "react";
-import axios from "axios";
+
+//components
 import EventGrid from "@/components/dashboard/EventGrid";
 import EventFilters from "@/components/dashboard/EventFilters";
 import Loading from "@/components/Loading";
 
-const PAGE_SIZE = 2;
+//util
+import axios from "axios";
+
+//Default page size for fetching additional results
+const PAGE_SIZE = 6;
+
 export default function Events() {
   const [filters, setFilters] = useState(null);
   const [resultsLoading, setResultsLoading] = useState(true);
@@ -13,29 +19,29 @@ export default function Events() {
   const [page, setPage] = useState(2);
   const [reachedEnd, setReachedEnd] = useState(false);
 
+  //Update search is passed filters from the EventFilters component
   const onUpdateSearch = async (filters) => {
+    //store filters for retrieving additional pages
     setFilters(filters);
+    //reset page index
     setPage(2);
     setResultsLoading(true);
-    console.log(filters);
     try {
-      const res = await axios.get(
-        `/api/events?page=1&&limit=${PAGE_SIZE}`,
-        {
-          params: {
-            filters: JSON.stringify(filters),
-          },
+      const res = await axios.get(`/api/events?page=1&&limit=${PAGE_SIZE}`, {
+        params: {
+          filters: JSON.stringify(filters),
         },
-        {
-          headers: {
-            "content-type": "application/json",
-          },
-        }
-      );
+      });
+
+      //Overwrite events array with new results
       setEvents(res.data.events);
       setResultsLoading(false);
+
+      //Set reached end if api indicates final page
       setReachedEnd(!res.data.hasNextPage);
-    } catch (e) {}
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const getInitialEvents = async () => {
@@ -49,6 +55,8 @@ export default function Events() {
       console.error(error);
     }
   };
+
+  //fetch the next page of results with the same filters and increment page index
   const onLoadMore = async () => {
     if (reachedEnd) return;
     setLoadingMore(true);
@@ -57,25 +65,24 @@ export default function Events() {
         `/api/events?page=${page}&&limit=${PAGE_SIZE}`,
         {
           filters: JSON.stringify(filters),
-        },
-        {
-          headers: {
-            "content-type": "application/json",
-          },
         }
       );
       setEvents((events) => [...events, ...res.data.events]);
       console.log(res.data.hasNextPage);
       setLoadingMore(false);
       setPage(page + 1);
-    } catch (error) {}
+    } catch (error) {
+      console.error(error);
+    }
   };
 
+  //Refetch initial events and reset page index
   const onClearSearch = async () => {
     getInitialEvents();
     setFilters(null);
     setPage(2);
   };
+
   useEffect(() => {
     getInitialEvents();
   }, []);

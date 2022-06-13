@@ -1,10 +1,17 @@
 import React from "react";
-import useSWR from "swr";
-import { fetcher } from "@/lib/fetcher";
+
+//components
+import { FaTrophy } from "react-icons/fa";
 import Loading from "@/components/Loading";
 import GameLogo from "@/components/GameLogo";
-import { FaTrophy } from "react-icons/fa";
 import Link from "next/link";
+
+//hooks
+import useSWR from "swr";
+
+//util
+import { fetcher } from "@/lib/fetcher";
+
 export default function Championsips() {
   const { data, error, isValidating } = useSWR("/api/championships", fetcher);
   const championships = data && data?.championships;

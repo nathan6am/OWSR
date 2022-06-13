@@ -1,23 +1,40 @@
 import React, { useContext, useEffect, useState } from "react";
+
+//icons
+import Helmet from "../public/icons/helmet.svg";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { BsFillCalendar2WeekFill } from "react-icons/bs";
 import { FaFlagCheckered, FaTrophy } from "react-icons/fa";
-import { MdNotifications, MdLogout } from "react-icons/md";
-import Helmet from "../public/icons/helmet.svg";
+import {
+  MdNotifications,
+  MdLogout,
+  MdOutlineFormatListNumbered,
+} from "react-icons/md";
+
+//componenets
 import Link from "next/link";
+
+//hooks
 import { useRouter } from "next/router";
+
+//context
 import { UserContext } from "./layouts/DashboardLayout";
 
 export default function Sidebar({ signOut, toggle, collapse }) {
+  const user = useContext(UserContext);
+
+  //Set active tab based on router path
   const router = useRouter();
   const pathname = router.pathname;
   const [activeTab, setActiveTab] = useState("my-races");
-  const user = useContext(UserContext);
+
   useEffect(() => {
     if (pathname.startsWith("/dashboard/my-races")) {
       setActiveTab("my-races");
     } else if (pathname.startsWith("/dashboard/events")) {
       setActiveTab("events");
+    } else if (pathname.startsWith("/dashboard/results")) {
+      setActiveTab("results");
     } else if (pathname.startsWith("/dashboard/championships")) {
       setActiveTab("championships");
     } else if (pathname.startsWith("/dashboard/profile")) {
@@ -64,6 +81,14 @@ export default function Sidebar({ signOut, toggle, collapse }) {
             activeKey="championships"
             href="/dashboard/championships"
             label="Championships"
+            collapse={collapse}
+          />
+          <SidebarNavItem
+            icon={MdOutlineFormatListNumbered}
+            activeTab={activeTab}
+            activeKey="results"
+            href="/dashboard/results"
+            label="Results"
             collapse={collapse}
           />
           <SidebarNavItem

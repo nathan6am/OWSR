@@ -1,7 +1,7 @@
 import React from "react";
-import { DateTime } from "luxon";
 import { useTimer } from "react-timer-hook";
 
+//Countdown component returns text only countdown to date prop
 export default function Countdown({ date, showFull }) {
   function formatTimer(val) {
     const string = `${val}`;

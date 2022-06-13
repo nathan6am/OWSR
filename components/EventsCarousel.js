@@ -1,9 +1,14 @@
-import React, { useState, useEffect } from "react";
-import EventCard from "./EventCardPublic";
+import React, { useEffect } from "react";
+
+//components
 import Link from "next/link";
+import EventCardPublic from "./EventCardPublic";
+
+//hooks
 import { motion, useAnimation } from "framer-motion";
 import { useInView } from "react-intersection-observer";
-import EventCardPublic from "./EventCardPublic";
+
+//Event card for home page with stagger entrance animations
 export default function EventsCarousel({ events }) {
   const animation = useAnimation();
   const { ref, inView } = useInView();

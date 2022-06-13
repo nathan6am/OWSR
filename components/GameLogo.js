@@ -1,5 +1,6 @@
 import React from "react";
 
+//Return unstyled logo image based on game
 export default function GameLogo({ game, className, width }) {
   switch (game) {
     case "assetto-corsa":

@@ -1,24 +1,31 @@
 import React, { useState } from "react";
-import useSWR from "swr";
-import { fetcher } from "@/lib/fetcher";
-import Countdown from "@/components/Countdown";
-import Loading from "@/components/Loading";
+
+//icons
 import EventIcon from "@/components/dashboard/EventIcon";
-import { MdDownload, MdCancel, Md } from "react-icons/md";
+import { MdDownload, MdCancel } from "react-icons/md";
 import { FaDollarSign } from "react-icons/fa";
 import { ImUnlocked, ImLock } from "react-icons/im";
 import { BsFillCloudSunFill } from "react-icons/bs";
 import { HiPencilAlt } from "react-icons/hi";
 import { FcCancel } from "react-icons/fc";
-import { DateTime } from "luxon";
-import axios from "axios";
-import { useCurrentUser } from "@/hooks/useCurrentUser";
+
+//components
 import { ClipLoader } from "react-spinners";
 import toast from "react-hot-toast";
-import CancelDialog from "@/components/modalContent/CancelDialog";
+import CancelDialog from "@/components/CancelDialog";
 import SessionTabs from "@/components/dashboard/SessionTabs";
-import { icons } from "react-icons";
 import GameLogo from "@/components/GameLogo";
+
+//hooks
+import useSWR from "swr";
+import { useCurrentUser } from "@/hooks/useCurrentUser";
+import { fetcher } from "@/lib/fetcher";
+import Countdown from "@/components/Countdown";
+import Loading from "@/components/Loading";
+
+//util
+import { DateTime } from "luxon";
+import axios from "axios";
 
 export default function EventDetails({ eventid }) {
   const { data: userData } = useCurrentUser();
@@ -50,7 +57,10 @@ export default function EventDetails({ eventid }) {
   };
   const event = data?.event;
   const registered = data?.event.registeredDrivers.includes(userData?.user._id);
+
+  //TODO: improve waitlist logic/UI
   const waitlisted = data?.event.waitlist.includes(userData?.user._id);
+
   return (
     <>
       {!data ? (
@@ -90,6 +100,7 @@ export default function EventDetails({ eventid }) {
   );
 }
 
+//Get eventid as initial prop from url
 EventDetails.getInitialProps = async ({ query }) => {
   const { eventid } = query;
   return {
@@ -99,6 +110,7 @@ EventDetails.getInitialProps = async ({ query }) => {
 
 EventDetails.layout = "Dashboard";
 
+//Subcomponents for Event Details
 function ContentCard({ cars, track }) {
   return (
     <div className="bg-dark-300 lg:col-span-2 overflow-hidden my-4">
@@ -121,6 +133,7 @@ function ContentCard({ cars, track }) {
     </div>
   );
 }
+
 function WeatherCard({ weather }) {
   return (
     <div className="bg-sky-800 shadow w-full overflow-hidden  my-4">

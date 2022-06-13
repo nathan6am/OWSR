@@ -1,16 +1,26 @@
 import React, { useState, useEffect, useCallback } from "react";
+
+//components
 import Modal from "react-modal";
-import { hideAuth } from "../lib/util/navigateModal";
 import { MdCancel } from "react-icons/md";
+
+//hooks
+import { useCurrentUser } from "../hooks/useCurrentUser";
+import { useRouter } from "next/router";
+
+//util
+import { hideAuth } from "@/lib/util/navigateModal";
+import { fetcher } from "@/lib/fetcher";
+
+//Modal Content Components
+import CancelDialog from "./CancelDialog";
 import SignUpContent from "./modalContent/SignUpContent";
 import SignInContent from "./modalContent/SignInContent";
 import CompleteProfileContent from "./modalContent/CompleteProfileContent";
 import LinkSteamContent from "./modalContent/LinkSteamContent";
-import { useCurrentUser } from "../hooks/useCurrentUser";
-import { useRouter } from "next/router";
-import CancelDialog from "./modalContent/CancelDialog";
-import { fetcher } from "../lib/fetcher";
 import LinkFailedContent from "./modalContent/LinkFailedContent";
+
+//Modal/overlay custom styles
 const customStyles = {
   content: {
     top: "50%",

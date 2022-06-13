@@ -1,21 +1,32 @@
 import React, { useState, useCallback, useRef, useEffect } from "react";
+
+//components
 import Link from "next/link";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { ClipLoader } from "react-spinners";
-import { useRouter } from "next/router";
 import { FaDiscord, FaSteam } from "react-icons/fa";
-import { fetcher } from "@/lib/fetcher";
+
+//hooks
+import { useRouter } from "next/router";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
-import CountrySelect from "../UI/CountrySelect";
+
+//util
+import { fetcher } from "@/lib/fetcher";
 import {
   showSignUp,
   showCompleteProfile,
   showLinkSteam,
 } from "@/lib/util/navigateModal";
-export default function SignInContent() {
-  const { data: { user } = {}, mutate, isValidating } = useCurrentUser();
-  const router = useRouter();
 
+export default function SignInContent() {
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
+  const [loginFailed, setLoginFailed] = useState(false);
+
+  //Fetch current user to check if session already exists
+  const { data: { user } = {}, mutate, isValidating } = useCurrentUser();
+
+  // Handle Redirects if user profile is incomplete or user is already logged in
   useEffect(() => {
     if (isValidating) return;
     if (user && !user.registered) {
@@ -26,8 +37,8 @@ export default function SignInContent() {
       router.replace("/dashboard");
     }
   }, [user, router, isValidating]);
-  const [loading, setLoading] = useState(false);
-  const [loginFailed, setLoginFailed] = useState(false);
+
+  //Attempt login via credentials
   const onSubmit = useCallback(
     async (values) => {
       setLoading(true);
@@ -44,8 +55,8 @@ export default function SignInContent() {
           setLoginFailed(true);
         } else {
           setLoginFailed(false);
+          //Automatically update the cached user upon success response
           mutate({ user: response.user }, false);
-          console.log(response.user);
         }
       } catch (e) {
         setLoginFailed(true);
@@ -55,6 +66,7 @@ export default function SignInContent() {
     },
     [mutate]
   );
+
   return (
     <>
       <img

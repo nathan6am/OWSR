@@ -4,7 +4,7 @@ import EventGridPublic from "@/components/EventGridPublic";
 import EventFilters from "@/components/dashboard/EventFilters";
 import Loading from "@/components/Loading";
 
-const PAGE_SIZE = 2;
+const PAGE_SIZE = 6;
 export default function Events() {
   const [filters, setFilters] = useState(null);
   const [resultsLoading, setResultsLoading] = useState(true);

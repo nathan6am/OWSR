@@ -1,4 +1,6 @@
+//Controls for event search filtering
 import { useState, Fragment } from "react";
+import { Listbox } from "@headlessui/react";
 import {
   MdClose,
   MdOutlineExpandMore,
@@ -10,6 +12,7 @@ import {
   MdRadioButtonUnchecked,
 } from "react-icons/md";
 
+//Declare filtering option arrays
 const eventTypes = [
   { value: "championship", label: "Championship" },
   { value: "special", label: "Special Events" },
@@ -31,24 +34,14 @@ const modOptions = [
 ];
 
 const sortOptions = [
-  {
-    value: "date",
-    label: "Date",
-  },
-  {
-    value: "popular",
-    label: "Most Popular",
-  },
+  { value: "date", label: "Date" },
+  { value: "popular", label: "Most Popular" },
 ];
 const setupOptions = [
-  {
-    value: "fixed",
-    label: "Fixed",
-  },
+  { value: "fixed", label: "Fixed" },
   { value: "open", label: "Open" },
 ];
 
-import { Listbox } from "@headlessui/react";
 export default function EventFilters({
   onClearSearch,
   onUpdateSearch,
@@ -71,6 +64,7 @@ export default function EventFilters({
     };
   };
   const clearSearch = () => {
+    //Reset options to default(include all) and call clear search to reload initial data
     setSelectedSort(sortOptions[0]);
     setSelectedMods(modOptions[2]);
     setSelectedEventTypes(eventTypes);
@@ -141,6 +135,7 @@ export default function EventFilters({
         >
           <button
             onClick={() => {
+              //pass filter state to update search function in events page parent
               onUpdateSearch(getFilters());
             }}
             className="text-white bg-dark-400 hover:bg-dark-500 rounded p-2 px-4  flex flex-row items-center sm:mb-0"
@@ -160,6 +155,8 @@ export default function EventFilters({
     </div>
   );
 }
+
+//Listbox checkbox/radio componenets
 
 function SetupFilters({ selectedSetups, setSelectedSetups }) {
   return (

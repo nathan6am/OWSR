@@ -1,17 +1,24 @@
-import React, { useState, useCallback, useRef, useEffect } from "react";
+import React, { useState, useCallback, useEffect } from "react";
+
+//components
 import Link from "next/link";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { ClipLoader } from "react-spinners";
-import { useRouter } from "next/router";
 import { FaDiscord, FaSteam } from "react-icons/fa";
-import { fetcher } from "@/lib/fetcher";
+
+//hooks
+import { useRouter } from "next/router";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
+
+//util
+import { fetcher } from "@/lib/fetcher";
 import { showSignIn, showCompleteProfile } from "@/lib/util/navigateModal";
 
 export default function SignUpContent() {
-  // Handle Redirects if user profile is incomplete or user is already logged in
   const { data: { user } = {}, mutate, isValidating } = useCurrentUser();
   const router = useRouter();
+
+  // Handle Redirects if user profile is incomplete or user is already logged in
   useEffect(() => {
     if (isValidating) return;
     if (user && !user.registered) {

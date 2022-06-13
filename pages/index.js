@@ -1,12 +1,22 @@
+import React, { useState, useEffect } from "react";
 
+//db imports for getServerSideProps
 import dbConnect from "../lib/db/dbConnect";
 import Event from "../lib/db/models/Event";
-import { useRouter } from "next/router";
-import React, { useState, useEffect } from "react";
-import { FaDiscord, } from "react-icons/fa";
+
+//icons
+import { FaDiscord } from "react-icons/fa";
+
+//Page components
 import GetStartedSection from "../components/GetStartedSection";
 import EventsCarousel from "../components/EventsCarousel";
+
+//hooks
+import { useRouter } from "next/router";
+
+//util
 import { showSignIn, showSignUp } from "../lib/util/navigateModal";
+
 export default function Home({ events }) {
   const router = useRouter();
   const ready = router.ready;
@@ -24,11 +34,34 @@ export default function Home({ events }) {
       <section className="flex bg-dark-200">
         <GetStartedSection />
       </section>
-      <img src="/icons/flags/ad.svg" height={20} width={40} />
-      <section className="flex flex-col bg-transparent w-full h-[500px]">
+      <section className="container w-full p-8">
         <h1 className="text-center">About</h1>
+        <h2 className="text-xl mb-2">What is Lorem Ipsum?</h2>
+        <p className="mb-4">
+          Lorem Ipsum is simply dummy text of the printing and typesetting
+          industry. Lorem Ipsum has been the industry's standard dummy text ever
+          since the 1500s, when an unknown printer took a galley of type and
+          scrambled it to make a type specimen book. It has survived not only
+          five centuries, but also the leap into electronic typesetting,
+          remaining essentially unchanged. It was popularised in the 1960s with
+          the release of Letraset sheets containing Lorem Ipsum passages, and
+          more recently with desktop publishing software like Aldus PageMaker
+          including versions of Lorem Ipsum.
+        </p>
+        <h2 className="text-xl mb-2">Why do we use it?</h2>
+        <p className="mb-4">
+          It is a long established fact that a reader will be distracted by the
+          readable content of a page when looking at its layout. The point of
+          using Lorem Ipsum is that it has a more-or-less normal distribution of
+          letters, as opposed to using 'Content here, content here', making it
+          look like readable English. Many desktop publishing packages and web
+          page editors now use Lorem Ipsum as their default model text, and a
+          search for 'lorem ipsum' will uncover many web sites still in their
+          infancy. Various versions have evolved over the years, sometimes by
+          accident, sometimes on purpose (injected humour and the like).
+        </p>
       </section>
-      <section className="bg-dark-300 flex">
+      <section className="bg-dark-200 flex">
         <EventsCarousel events={events} />
       </section>
     </div>

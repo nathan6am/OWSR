@@ -1,31 +1,21 @@
 import React, { useEffect, useState } from "react";
-import { useTimer } from "react-timer-hook";
+
+//icons
 import { IoStar } from "react-icons/io5";
 import { BsFillCalendar2WeekFill } from "react-icons/bs";
 import { FaTrophy } from "react-icons/fa";
-import { DateTime } from "luxon";
+import { MdOutlineTimer } from "react-icons/md";
+
+//components
 import ReactTooltip from "react-tooltip";
+import Countdown from "../Countdown";
 import GameLogo from "../GameLogo";
+
+//utilities
+import { DateTime } from "luxon";
+
 export default function EventCard({ event }) {
-  function formatTimer(val) {
-    const string = `${val}`;
-    const single = string.length === 1;
-    if (single) {
-      return `0${string}`;
-    } else {
-      return string;
-    }
-  }
   const dt = DateTime.fromISO(event.date);
-  const timeUntil = useTimer({
-    expiryTimestamp: new Date(event.date),
-    autoStart: false,
-  });
-
-  useEffect(() => {
-    timeUntil.start();
-  }, []);
-
   return (
     <div className="flex flex-col w-full  rounded shadow-lg hover:shadow-red-700/[0.2]  bg-dark-300 overflow-hidden group cursor-pointer min-h-[280px] md:min-h-[320px] max-w-[500px] mx-auto">
       <div className="flex-grow overflow-hidden relative">
@@ -39,7 +29,6 @@ export default function EventCard({ event }) {
           }}
         >
           <div className=" bg-dark-100/[0.4] flex w-full h-full">
-            {" "}
             <div className="opacity-0 transition-opacity ease-in-out group-hover:opacity-50 bg-red-700 flex w-full h-full"></div>
           </div>
         </div>
@@ -50,11 +39,7 @@ export default function EventCard({ event }) {
           suppressHydrationWarning={true}
           className="absolute bottom-2 left-2 rounded-md bg-red-700/[0.8] py-2 px-3"
         >
-          {timeUntil.days
-            ? `${timeUntil.days} day${timeUntil.days > 1 ? "s" : ""} `
-            : `${formatTimer(timeUntil.hours)}h : ${formatTimer(
-                timeUntil.minutes
-              )}min`}
+          <Countdown date={event.date} />
         </div>
 
         <EventIcon eventType={event.type} />
@@ -108,7 +93,10 @@ function EventIcon({ eventType }) {
       );
     case "hotlap":
       return (
-        <FaTrophy className="absolute top-2 right-2 text-red-500" size="30px" />
+        <MdOutlineTimer
+          className="absolute top-2 right-2 text-red-500"
+          size="30px"
+        />
       );
     default:
       return null;

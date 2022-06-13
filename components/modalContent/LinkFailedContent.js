@@ -1,11 +1,15 @@
-import React, { useState, useCallback, useRef, useEffect } from "react";
+import React, { useCallback } from "react";
+
+//components
 import Link from "next/link";
-import { Formik, Form, Field, ErrorMessage } from "formik";
-import { ClipLoader } from "react-spinners";
-import { useRouter } from "next/router";
-import { FaDiscord, FaSteam } from "react-icons/fa";
-import { fetcher } from "@/lib/fetcher";
+import { FaSteam } from "react-icons/fa";
+
+//hooks
 import { useCurrentUser } from "@/hooks/useCurrentUser";
+import { useRouter } from "next/router";
+
+//util
+import { fetcher } from "@/lib/fetcher";
 import { showSignIn, showCompleteProfile } from "@/lib/util/navigateModal";
 
 export default function LinkFailedContent() {

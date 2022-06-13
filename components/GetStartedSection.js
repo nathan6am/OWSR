@@ -1,10 +1,16 @@
-import React, { useState, useEffect } from "react";
-import { motion, useAnimation } from "framer-motion";
-import { useInView } from "react-intersection-observer";
+import React, { useEffect } from "react";
+
+//icons
 import { BsFillPersonPlusFill, BsCalendarWeekFill } from "react-icons/bs";
 import { GiSteeringWheel } from "react-icons/gi";
 import { MdNavigateNext, MdKeyboardArrowDown } from "react-icons/md";
 import { FaScroll, FaTrophy } from "react-icons/fa";
+
+//hooks
+import { motion, useAnimation } from "framer-motion";
+import { useInView } from "react-intersection-observer";
+
+//Staggered entrance animation for get started section on homepage
 export default function GetStartedSection() {
   const container = {
     hidden: { opacity: 0 },
@@ -73,9 +79,8 @@ export default function GetStartedSection() {
       ref={ref}
       className=" w-screen px-3 md:px-5 xl:px-10 py-10 flex flex-col"
     >
-     
-        <h1 className="text-white text-center ">Get Started</h1>
-  
+      <h1 className="text-white text-center ">Get Started</h1>
+
       <motion.ol
         variants={container}
         animate={animation}
