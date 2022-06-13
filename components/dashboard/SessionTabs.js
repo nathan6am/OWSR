@@ -11,6 +11,7 @@ export default function SessionTabs({ sessions }) {
           {sessions.map((session, idx) => {
             return (
               <Tab
+                key={idx}
                 className={({ selected }) =>
                   `w-[90px] sm:w-[120px] py-4  ${
                     selected
@@ -30,7 +31,7 @@ export default function SessionTabs({ sessions }) {
         <Tab.Panels className="w-full bg-dark-300">
           {sessions.map((session, idx) => {
             return (
-              <Tab.Panel className="min-h-40 py-10 px-5 ">
+              <Tab.Panel key={idx} className="min-h-40 py-10 px-5 ">
                 <div className="my-2 ">
                   Duration:{" "}
                   <span className="text-red-400 font-bold">

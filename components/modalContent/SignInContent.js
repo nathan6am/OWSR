@@ -152,7 +152,7 @@ export default function SignInContent() {
         </Link>
       </div>
       <p className="text-center text-red-700 mt-6 mb-1">
-        Don't have an account?{" "}
+        Don&apost have an account?{" "}
       </p>
       <button
         onClick={() => {
