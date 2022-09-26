@@ -37,7 +37,7 @@ body {
   padding: 0;
   margin: 0;
 
-  font-family: "Raleway", sans-serif;
+  font-family: "Roboto", sans-serif;
   font-weight: 400;
   font-style: normal;
 }
@@ -65,6 +65,10 @@ a {
 
 * {
   box-sizing: border-box;
+}
+
+.react-colorful__last-control {
+  border-radius: 0px !important;
 }
 .ReactModal__Body--open {
   overflow: hidden; /* prevents background page from scrolling when the modal is open */
