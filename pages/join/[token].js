@@ -81,8 +81,8 @@ export default function InvitePage({ tokenKey, session }) {
               </h2>
               <div className="flex h-full w-full items-center justify-center py-20">
                 <p>
-                  We're sorry, this invite link is either invalid or has
-                  expired. You may now close the page.
+                  {`We're sorry, this invite link is either invalid or has
+                  expired. You may now close the page.`}
                 </p>
               </div>
             </div>
