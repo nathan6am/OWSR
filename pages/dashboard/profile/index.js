@@ -10,6 +10,8 @@ import {
   MdExitToApp,
   MdNavigateNext,
   MdOutlineContentCopy,
+  MdOutlineMoreVert,
+  MdAdminPanelSettings,
 } from "react-icons/md";
 import { IoMdPodium } from "react-icons/io";
 import { FaMedal } from "react-icons/fa";
@@ -20,14 +22,13 @@ import { ChromePicker } from "react-color";
 import { HexColorPicker } from "react-colorful";
 import { Popover } from "@headlessui/react";
 import TeamColors from "@/components/TeamColors";
-import NonSSRWrapper from "@/components/no-ssr-wrapper";
 
 //hooks
 import { useProfile } from "hooks/useProfile";
 import { useRouter } from "next/router";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
 import { debounce } from "lodash";
-function CreateTeamModal({ isOpen, hide }) {
+function CreateTeamModal({ isOpen, hide, mutate }) {
   const [color, setColor] = useState("#ffffff");
 
   const [colorText, setColorText] = useState(color.slice(1, 7));
@@ -157,6 +158,7 @@ function CreateTeamModal({ isOpen, hide }) {
         setErrorText("");
         setDescription("");
         setVerifying(true);
+        mutate();
       }}
       isOpen={isOpen}
       hide={hide}
@@ -353,14 +355,40 @@ function CreateTeamModal({ isOpen, hide }) {
   );
 }
 
-function TeamsSection({ teams, showModal, hideModal }) {
+function TeamsSection({ teams, showModal, user }) {
   return (
     <section className="w-full bd-dark-200 p-8">
       <h2>My Teams</h2>
-      {teams ? <></> : <p>{`You don't currently belong to any teams`}</p>}
+      {teams ? (
+        <>
+          <div className="my-6 bg-dark-400/[0.2] border-t border-white/[0.3]">
+            {teams.map((team) => {
+              return (
+                <div
+                  key={team._id}
+                  className="flex flex-row justify-between py-4 px-4 border-b hover:bg-white/[0.2] border-white/[0.3]"
+                >
+                  <div className="flex flex-row items-center">
+                    <TeamColors colors={team.colors} />
+                    <p className="text-lg">{team.name}</p>
+                    {team.owner === user._id && (
+                      <MdAdminPanelSettings className="opacity-40 text-2xl ml-2" />
+                    )}
+                  </div>
+                  <div className="flex flex-row items-center">
+                    <MdOutlineMoreVert className="text-2xl" />
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </>
+      ) : (
+        <p>{`You don't currently belong to any teams`}</p>
+      )}
       <button
         onClick={showModal}
-        className="flex flex-row w-fit bg-red-500 hover:bg-red-400 my-2 py-2 px-4 rounded items-center"
+        className="flex flex-row w-fit bg-red-500 hover:bg-red-400 my-2 py-4 px-4 rounded items-center"
       >
         Create a Team <MdAdd className="inline text-xl ml-3" />
       </button>
@@ -397,7 +425,11 @@ export default function DriverProfile() {
         <Loading />
       ) : (
         <>
-          <CreateTeamModal isOpen={teamsModalShown} hide={hideAddTeam} />
+          <CreateTeamModal
+            isOpen={teamsModalShown}
+            hide={hideAddTeam}
+            mutate={mutate}
+          />
           <main className="container bg-dark-300 px-0">
             <section className="p-8">
               <div className="flex flex-row ">
@@ -431,7 +463,11 @@ export default function DriverProfile() {
                 </div>
               </div>
             </section>
-            <TeamsSection teams={user?.teams} showModal={showAddTeam} />
+            <TeamsSection
+              teams={user?.teams}
+              showModal={showAddTeam}
+              user={user}
+            />
           </main>
         </>
       )}
