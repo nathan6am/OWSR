@@ -357,7 +357,7 @@ function TeamsSection({ teams, showModal, hideModal }) {
   return (
     <section className="w-full bd-dark-200 p-8">
       <h2>My Teams</h2>
-      {teams ? <></> : <p>You don't currently belong to any teams</p>}
+      {teams ? <></> : <p>{`You don't currently belong to any teams`}</p>}
       <button
         onClick={showModal}
         className="flex flex-row w-fit bg-red-500 hover:bg-red-400 my-2 py-2 px-4 rounded items-center"
