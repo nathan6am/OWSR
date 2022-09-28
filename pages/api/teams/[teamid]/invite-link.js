@@ -16,7 +16,7 @@ handler.use(...auths).get(verify, async (req, res) => {
     } else if (team.drivers.includes(userid)) {
       const token = await db.createInviteToken(teamid, userid);
       const link = `${process.env.BASE_URL}join/${token.key}`;
-      console.log(link);
+
       res.status(200).json({ success: true, link: link });
     } else {
       res.status(401).end();
