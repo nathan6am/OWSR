@@ -17,9 +17,14 @@ const customStyles = {
     backgroundColor: "rgba(8, 8, 8, 0.2)",
   },
 };
-export default function GenericModal({ children, isOpen, hide }) {
+export default function GenericModal({ children, isOpen, hide, onAfterClose }) {
   return (
-    <Modal style={customStyles} isOpen={isOpen} ariaHideApp={false}>
+    <Modal
+      onAfterClose={onAfterClose}
+      style={customStyles}
+      isOpen={isOpen}
+      ariaHideApp={false}
+    >
       <div className="w-full h-full">{children}</div>
     </Modal>
   );
