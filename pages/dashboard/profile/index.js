@@ -72,7 +72,7 @@ function CreateTeamModal({ isOpen, hide }) {
       });
       if (res.data.success) {
         setCreatedTeam(res.data.team);
-        setCreatedTeam((curr) => ({ ...curr, token: res.data.token }));
+        setCreatedTeam((curr) => ({ ...curr, link: res.data.link }));
         setCreating(false);
       } else {
         setFailed(true);
@@ -177,13 +177,11 @@ function CreateTeamModal({ isOpen, hide }) {
                 Share this link with others to invite them to join your team
               </p>
               <div className="flex flex-row items-center bg-dark-200 p-1 rounded-md ring-2 ring-dark-400">
-                <p className="mx-4 mr-8">{`http://localhost:3000/join/${createdTeam.token.key}`}</p>
+                <p className="mx-4 mr-8">{createdTeam.link}</p>
                 <button
                   data-tip="tooltip"
                   onClick={() => {
-                    navigator.clipboard.writeText(
-                      `http://localhost:3000/join/${createdTeam.token.key}`
-                    );
+                    navigator.clipboard.writeText(createdTeam.link);
                   }}
                   className="px-3 py-1 bg-dark-400 hover:bg-dark-500 rounded-md flex flex-row items-center"
                 >
