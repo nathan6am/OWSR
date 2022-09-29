@@ -23,11 +23,11 @@ import { HexColorPicker } from "react-colorful";
 import { Popover } from "@headlessui/react";
 import TeamColors from "@/components/TeamColors";
 
-//hooks
 import { useProfile } from "hooks/useProfile";
 import { useRouter } from "next/router";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
 import { debounce } from "lodash";
+import Link from "next/link";
 function CreateTeamModal({ isOpen, hide, mutate }) {
   const [color, setColor] = useState("#ffffff");
 
@@ -355,7 +355,7 @@ function CreateTeamModal({ isOpen, hide, mutate }) {
   );
 }
 
-function TeamsSection({ teams, showModal, user }) {
+function TeamsSection({ teams, showModal, user, router }) {
   return (
     <section className="w-full bd-dark-200 p-8">
       <h2>My Teams</h2>
@@ -364,21 +364,23 @@ function TeamsSection({ teams, showModal, user }) {
           <div className="my-6 bg-dark-400/[0.2] border-t border-white/[0.3]">
             {teams.map((team) => {
               return (
-                <div
-                  key={team._id}
-                  className="flex flex-row justify-between py-4 px-4 border-b hover:bg-white/[0.2] border-white/[0.3]"
-                >
-                  <div className="flex flex-row items-center">
-                    <TeamColors colors={team.colors} />
-                    <p className="text-lg">{team.name}</p>
-                    {team.owner === user._id && (
-                      <MdAdminPanelSettings className="opacity-40 text-2xl ml-2" />
-                    )}
+                <Link href={`/dashboard/profile/team/${team._id}`}>
+                  <div
+                    key={team._id}
+                    className="flex flex-row justify-between py-4 px-4 border-b hover:bg-white/[0.2] border-white/[0.3]"
+                  >
+                    <div className="flex flex-row items-center">
+                      <TeamColors colors={team.colors} />
+                      <p className="text-lg">{team.name}</p>
+                      {team.owner === user._id && (
+                        <MdAdminPanelSettings className="opacity-40 text-2xl ml-2" />
+                      )}
+                    </div>
+                    <div className="flex flex-row items-center">
+                      <MdOutlineMoreVert className="text-2xl" />
+                    </div>
                   </div>
-                  <div className="flex flex-row items-center">
-                    <MdOutlineMoreVert className="text-2xl" />
-                  </div>
-                </div>
+                </Link>
               );
             })}
           </div>
@@ -464,6 +466,7 @@ export default function DriverProfile() {
               </div>
             </section>
             <TeamsSection
+              router={router}
               teams={user?.teams}
               showModal={showAddTeam}
               user={user}

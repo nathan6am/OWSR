@@ -151,13 +151,15 @@ export default function SignUpContent() {
       <p className="text-white/[0.8] text-center text-lg m-3">OR</p>
       <hr className="mx-10 mb-3"></hr>
       <div className="flex flex-col items-center w-full">
-        <button className="btn-social bg-discord-200 hover:bg-discord-100">
-          <FaDiscord size="20px" className="mr-2" />
-          Sign Up With Discord
-        </button>
+        <Link href="/api/auth/discord">
+          <button className="btn-social bg-discord-200 hover:bg-discord-100">
+            <FaDiscord size="20px" className="mr-2" />
+            Sign Up With Discord
+          </button>
+        </Link>
       </div>
       <div className="flex flex-col items-center w-full">
-        <Link href="/api/auth/withsteam">
+        <Link href="/api/auth/steam">
           <button className="btn-social bg-white/[0.2] hover:bg-white/[0.3]">
             <FaSteam size="20px" className="mr-2" />
             Sign Up With Steam

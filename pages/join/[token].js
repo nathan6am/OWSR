@@ -7,6 +7,7 @@ import { showSignIn, showSignUp } from "@/lib/util/navigateModal";
 import { useRouter } from "next/router";
 import TeamColors from "@/components/TeamColors";
 import axios from "axios";
+import Link from "next/link";
 export default function InvitePage({ tokenKey, session }) {
   const router = useRouter();
   const [authenticated, setAuthenticated] = useState(false);
@@ -14,6 +15,7 @@ export default function InvitePage({ tokenKey, session }) {
   const [token, setToken] = useState(null);
   const [isValid, setIsValid] = useState(false);
   const [joined, setJoined] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(null);
   const {
     data: { user } = {},
     mutate: mutateUser,
@@ -51,6 +53,8 @@ export default function InvitePage({ tokenKey, session }) {
     if (res.data && res.data.success) {
       console.log(res.data);
       setJoined(true);
+    } else {
+      setErrorMessage(res.data.message);
     }
   };
 
@@ -62,35 +66,67 @@ export default function InvitePage({ tokenKey, session }) {
         <div className="bg-dark-500/[0.3] backdrop-blur-md max-w-[800px] w-full mx-4 h-fit rounded-lg p-8">
           {isValid ? (
             <>
-              {joined ? (
-                <h2>Success</h2>
-              ) : (
-                <div className="flex flex-col items-center h-full">
-                  <p className="text-white/[0.7]">
-                    {token.creator.name} has invited you to join the team:
+              {errorMessage ? (
+                <div>
+                  <h2 className="text-center text-2xl text-red-500">Oops</h2>
+                  <p className="my-20 text-center">{errorMessage}</p>
+                  <p className="text-center">
+                    You can now close this window or{" "}
+                    <Link href={"/dashboard"}>
+                      <p className="underline inline cursor-pointer hover:text-red-100">
+                        continue to dashboard
+                      </p>
+                    </Link>
                   </p>
-                  <div className="flex flex-row items-center my-20">
-                    <TeamColors colors={token.teamRef.colors} />
-                    <p className="text-xl">{token.teamRef.name}</p>
-                  </div>
-                  {authenticated ? (
-                    <button
-                      onClick={joinTeam}
-                      className="px-4 py-2 bg-green-600 hover:bg-green-400 rounded-md"
-                    >
-                      Join Team
-                    </button>
-                  ) : (
-                    <button
-                      className="text-red-500 hover:text-red-400 underline text-lg"
-                      onClick={() => {
-                        showSignIn(router);
-                      }}
-                    >
-                      Sign In to Continue
-                    </button>
-                  )}
                 </div>
+              ) : (
+                <>
+                  {joined ? (
+                    <div>
+                      <h2 className="text-center text-2xl text-green-400">
+                        Success
+                      </h2>
+                      <p className="text-center my-10">
+                        You are now a memmber of the team {token.teamRef.name}
+                      </p>
+                      <p className="text-center">
+                        You can now close this window or{" "}
+                        <Link href={"/dashboard"}>
+                          <p className="underline inline">
+                            continue to dashboard
+                          </p>
+                        </Link>
+                      </p>
+                    </div>
+                  ) : (
+                    <div className="flex flex-col items-center h-full">
+                      <p className="text-white/[0.7]">
+                        {token.creator.name} has invited you to join the team:
+                      </p>
+                      <div className="flex flex-row items-center my-20">
+                        <TeamColors colors={token.teamRef.colors} />
+                        <p className="text-xl">{token.teamRef.name}</p>
+                      </div>
+                      {authenticated ? (
+                        <button
+                          onClick={joinTeam}
+                          className="px-4 py-2 bg-green-600 hover:bg-green-400 rounded-md"
+                        >
+                          Join Team
+                        </button>
+                      ) : (
+                        <button
+                          className="text-red-500 hover:text-red-400 underline text-lg"
+                          onClick={() => {
+                            showSignIn(router);
+                          }}
+                        >
+                          Sign In to Continue
+                        </button>
+                      )}
+                    </div>
+                  )}
+                </>
               )}
             </>
           ) : (

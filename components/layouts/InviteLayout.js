@@ -8,7 +8,10 @@ export default function InviteLayout({ children }) {
       <AuthModal />
       <div
         className="flex w-full min-h-screen"
-        style={{ backgroundImage: "url(/images/bg.jpg)" }}
+        style={{
+          backgroundImage: "url(/images/bg.jpg)",
+          backgroundSize: "cover",
+        }}
       >
         <main className="flex w-full min-h-screen bg-dark-100/[0.5] flex-col">
           <div className="w-full p-4">

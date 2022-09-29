@@ -36,8 +36,8 @@ export default function Sidebar({ signOut, toggle, collapse }) {
       setActiveTab("events");
     } else if (pathname.startsWith("/dashboard/results")) {
       setActiveTab("results");
-    } else if (pathname.startsWith("/dashboard/championships")) {
-      setActiveTab("championships");
+    } else if (pathname.startsWith("/dashboard/leagues")) {
+      setActiveTab("leagues");
     } else if (pathname.startsWith("/dashboard/profile")) {
       setActiveTab("profile");
     } else {
@@ -79,9 +79,9 @@ export default function Sidebar({ signOut, toggle, collapse }) {
           <SidebarNavItem
             icon={FaTrophy}
             activeTab={activeTab}
-            activeKey="championships"
-            href="/dashboard/championships"
-            label="Championships"
+            activeKey="leagues"
+            href="/dashboard/leagues"
+            label="Leagues"
             collapse={collapse}
           />
           <SidebarNavItem

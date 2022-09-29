@@ -142,7 +142,7 @@ export default function SignInContent() {
           <Link href="/api/auth/discord">
             <button className="btn-social bg-discord-200 hover:bg-discord-100">
               <FaDiscord size="20px" className="mr-2" />
-              Sign Up With Discord
+              Sign In With Discord
             </button>
           </Link>
         </div>
