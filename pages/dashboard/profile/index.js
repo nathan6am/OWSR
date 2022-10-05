@@ -364,23 +364,32 @@ function TeamsSection({ teams, showModal, user, router }) {
           <div className="my-6 bg-dark-400/[0.2] border-t border-white/[0.3]">
             {teams.map((team) => {
               return (
-                <Link href={`/dashboard/profile/team/${team._id}`}>
-                  <div
-                    key={team._id}
-                    className="flex flex-row justify-between py-4 px-4 border-b hover:bg-white/[0.2] border-white/[0.3]"
-                  >
-                    <div className="flex flex-row items-center">
-                      <TeamColors colors={team.colors} />
-                      <p className="text-lg">{team.name}</p>
-                      {team.owner === user._id && (
-                        <MdAdminPanelSettings className="opacity-40 text-2xl ml-2" />
-                      )}
-                    </div>
-                    <div className="flex flex-row items-center">
-                      <MdOutlineMoreVert className="text-2xl" />
-                    </div>
+                <div
+                  key={team._id}
+                  className="flex flex-row justify-between py-4 px-4 border-b hover:bg-white/[0.2] border-white/[0.3]"
+                >
+                  <div className="flex flex-row items-center">
+                    <TeamColors colors={team.colors} />
+                    <p className="text-lg">{team.name}</p>
+                    {team.owner === user._id && (
+                      <MdAdminPanelSettings className="opacity-40 text-2xl ml-2" />
+                    )}
                   </div>
-                </Link>
+                  <div className="flex flex-row items-center">
+                    <Popover className="relative">
+                      <Popover.Button className={"flex flex-row items-center"}>
+                        <MdOutlineMoreVert className="text-2xl" />
+                      </Popover.Button>
+
+                      <Popover.Panel className="absolute z-10 translate-y-[-30px] translate-x-[-110px] bg-dark-400">
+                        <p className="px-4 py-2">Dashboard</p>
+                        <p className="px-4 py-2">Leave</p>
+                        <p className="px-4 py-2">Delete</p>
+                        <p className="px-4 py-2">Dashboard</p>
+                      </Popover.Panel>
+                    </Popover>
+                  </div>
+                </div>
               );
             })}
           </div>
@@ -414,9 +423,6 @@ export default function DriverProfile() {
     if (!data && !error) return;
     if (!data.user) {
       router.replace("/?auth=sign-in");
-    }
-    if (data) {
-      console.log(data);
     }
   }, [router, data, error]);
   const user = data?.user;
