@@ -84,7 +84,7 @@ function CreateTeamModal({ isOpen, hide, mutate }) {
   const handleChange = (e) => {
     e.preventDefault;
     const text = e.target.value;
-    console.log(text.length);
+
     const charExp = /^[a-zA-Z0-9]*$/;
     const hexExp = /^#([0-9a-f]{6})$/i;
     if (text.length >= 6) {
@@ -103,7 +103,7 @@ function CreateTeamModal({ isOpen, hide, mutate }) {
   const handleSecChange = (e) => {
     e.preventDefault;
     const text = e.target.value;
-    console.log(text.length);
+
     const charExp = /^[a-zA-Z0-9]*$/;
     const hexExp = /^#([0-9a-f]{6})$/i;
     if (text.length >= 6) {

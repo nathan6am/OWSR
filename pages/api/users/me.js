@@ -6,7 +6,7 @@ import verify from "../../../lib/middlewares/verify";
 handler.use(...auths, verify);
 handler.get(async (req, res) => {
   const userinfo = await db.populateProfile(req.user._id);
-  console.log(userinfo);
+
   res.json({ user: userinfo });
 });
 handler.patch(async (req, res) => {
