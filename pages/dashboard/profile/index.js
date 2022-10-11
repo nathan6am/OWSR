@@ -3,6 +3,7 @@ import ReactTooltip from "react-tooltip";
 import axios from "axios";
 //components
 import Loading from "@/components/Loading";
+import UIButton from "@/components/UI/UIButton";
 import {
   MdEmail,
   MdAdd,
@@ -397,12 +398,9 @@ function TeamsSection({ teams, showModal, user, router }) {
       ) : (
         <p>{`You don't currently belong to any teams`}</p>
       )}
-      <button
-        onClick={showModal}
-        className="flex flex-row w-fit bg-red-500 hover:bg-red-400 my-2 py-4 px-4 rounded items-center"
-      >
+      <UIButton variant="danger" size="md" className="my-2" onClick={showModal}>
         Create a Team <MdAdd className="inline text-xl ml-3" />
-      </button>
+      </UIButton>
     </section>
   );
 }
