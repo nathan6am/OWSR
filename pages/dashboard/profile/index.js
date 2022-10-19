@@ -367,15 +367,18 @@ function TeamsSection({ teams, showModal, user, router }) {
               return (
                 <div
                   key={team._id}
-                  className="flex flex-row justify-between py-4 px-4 border-b hover:bg-white/[0.2] border-white/[0.3]"
+                  className="flex flex-row justify-between  px-4 border-b hover:bg-white/[0.2] border-white/[0.3]"
                 >
-                  <div className="flex flex-row items-center">
-                    <TeamColors colors={team.colors} />
-                    <p className="text-lg">{team.name}</p>
-                    {team.owner === user._id && (
-                      <MdAdminPanelSettings className="opacity-40 text-2xl ml-2" />
-                    )}
-                  </div>
+                  <Link href={`/dashboard/profile/team/${team._id}`}>
+                    <div className="flex flex-row items-center grow py-4 cursor-pointer">
+                      <TeamColors colors={team.colors} />
+                      <p className="text-lg">{team.name}</p>
+                      {team.owner === user._id && (
+                        <MdAdminPanelSettings className="opacity-40 text-2xl ml-2" />
+                      )}
+                    </div>
+                  </Link>
+
                   <div className="flex flex-row items-center">
                     <Popover className="relative">
                       <Popover.Button className={"flex flex-row items-center"}>
