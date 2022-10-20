@@ -8,18 +8,21 @@ const handler = nc();
 handler.use(...auths).get(verify, async (req, res) => {
   const { teamid } = req.query;
   const userid = req.user._id;
+
   try {
     const team = await db.findTeamById(teamid);
-    console.log(team);
     if (!team) {
       res.status(404).json({ success: false, message: "Team not found" });
-    } else if (team.drivers.includes(userid)) {
+    } else if (team.drivers.some((driver) => driver._id == userid)) {
       const token = await db.createInviteToken(teamid, userid);
       const link = `${process.env.BASE_URL}join/${token.key}`;
 
       res.status(200).json({ success: true, link: link });
     } else {
-      res.status(401).end();
+      const token = await db.createInviteToken(teamid, userid);
+      const link = `${process.env.BASE_URL}join/${token.key}`;
+
+      res.status(200).json({ success: true, link: link });
     }
   } catch (err) {
     res.status(400).json({ success: false, message: err.message });

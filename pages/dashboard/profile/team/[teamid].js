@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import useSWR from "swr";
 import TeamColors from "@/components/TeamColors";
 import { fetcher } from "@/lib/fetcher";
@@ -6,7 +6,61 @@ import Loading from "@/components/Loading";
 import Head from "next/head";
 import Helmet from "../../../../public/icons/helmet.svg";
 import EditButton from "@/components/UI/EditButton";
-import { MdExitToApp, MdPersonAdd } from "react-icons/md";
+import {
+  MdExitToApp,
+  MdPersonAdd,
+  MdAdminPanelSettings,
+  MdOutlineContentCopy,
+} from "react-icons/md";
+import GenericModal from "@/components/GenericModal";
+import axios from "axios";
+function InviteModal({ isOpen, hide, teamid }) {
+  const [link, setLink] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const fetchLink = async () => {
+    setError(null);
+    setLoading(true);
+    const res = await axios.get(`/api/teams/${teamid}/invite-link`, {
+      withCredentials: true,
+    });
+    if (!res.data || !res.data.success) {
+      setError("Something Went Wrong");
+      setLoading(false);
+    } else {
+      setLink(res.data.link);
+      setLoading(false);
+    }
+    setLoading(false);
+  };
+  return (
+    <GenericModal isOpen={isOpen} hide={hide} onAfterOpen={fetchLink}>
+      <div className="flex w-full flex-col justify-between p-5 py-10">
+        <div className="flex flex-col mb-10">
+          <p className="text-left text-white/[0.7] my-2">
+            Share this link with others to invite them to join your team
+          </p>
+          <></>
+          <div className="flex flex-row items-center justify-between bg-dark-200 p-1 rounded-md ring-2 ring-dark-400">
+            {loading ? "Generating link" : <p className="mx-4 mr-8">{link}</p>}
+            <button
+              onClick={() => {
+                navigator.clipboard.writeText(link);
+              }}
+              className="px-3 py-1 bg-dark-400 hover:bg-dark-500 rounded-md flex flex-row items-center"
+            >
+              Copy <MdOutlineContentCopy className="ml-1" />
+            </button>
+          </div>
+          <p className="text-left text-white/[0.5] my-2 text-sm ml-4">
+            This link will expire after 7 days.
+          </p>
+          <button onClick={hide}>Close</button>
+        </div>
+      </div>
+    </GenericModal>
+  );
+}
 export default function TeamDashboard({ teamid }) {
   const { data, mutate, error } = useSWR(`/api/teams/${teamid}`, fetcher);
   return (
@@ -18,7 +72,7 @@ export default function TeamDashboard({ teamid }) {
           {data && (
             <>
               <Header />
-              <div className="container bg-dark-200">
+              <div className="container ">
                 <TeamDetails team={data.data} />
               </div>
             </>
@@ -39,8 +93,16 @@ TeamDashboard.getInitialProps = async ({ query }) => {
 };
 
 function TeamDetails({ team }) {
+  const [inviteModalShown, setInviteModalShown] = useState(false);
   return (
     <>
+      <InviteModal
+        isOpen={inviteModalShown}
+        teamid={team._id}
+        hide={() => {
+          setInviteModalShown(false);
+        }}
+      />
       <div className="w-full p-10 flex flex-col">
         <div className="flex flex-row items-center ">
           <TeamColors colors={team.colors} />
@@ -55,21 +117,33 @@ function TeamDetails({ team }) {
             <h2>Team Roster</h2>
             <EditButton />
           </div>
-          <div className="flex flex-row items-center opacity-75 bg-dark-400 w-fit p-2 px-4 rounded-lg ">
+          <button
+            onClick={() => {
+              setInviteModalShown(true);
+            }}
+            className="flex flex-row items-center bg-dark-400 w-fit p-2 px-4 rounded-lg "
+          >
             Invite Drivers <MdPersonAdd className="ml-2 text-xl" />
-          </div>
+          </button>
         </div>
 
-        <div className="border-t ">
+        <div className="border-t  border-white/[0.3]">
           {team.drivers.map((driver) => {
             return (
               <div
-                className="py-4 border-b flex flex-row items-center"
+                className="py-4 border-b border-white/[0.3] flex flex-row items-center"
                 key={driver._id}
               >
-                <Helmet className="fill-white/[0.7] mr-2" />
+                <img
+                  className="mr-5 ml-1 inline"
+                  src={`/icons/flags/${driver.country.toLowerCase()}.svg`}
+                  width="25px"
+                  height="auto"
+                />
                 {driver.name}
-                {driver._id === team.owner && " (Owner)"}
+                {driver._id === team.owner && (
+                  <MdAdminPanelSettings className="ml-2 text-xl opacity-50" />
+                )}
               </div>
             );
           })}

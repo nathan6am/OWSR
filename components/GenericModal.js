@@ -17,10 +17,17 @@ const customStyles = {
     backgroundColor: "rgba(8, 8, 8, 0.2)",
   },
 };
-export default function GenericModal({ children, isOpen, hide, onAfterClose }) {
+export default function GenericModal({
+  children,
+  isOpen,
+  hide,
+  onAfterClose,
+  onAfterOpen,
+}) {
   return (
     <Modal
       onAfterClose={onAfterClose}
+      onAfterOpen={onAfterOpen}
       style={customStyles}
       isOpen={isOpen}
       ariaHideApp={false}
