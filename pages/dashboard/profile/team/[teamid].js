@@ -72,7 +72,7 @@ export default function TeamDashboard({ teamid }) {
           {data && (
             <>
               <Header />
-              <div className="container ">
+              <div className="container bg-dark-200 h-full">
                 <TeamDetails team={data.data} />
               </div>
             </>
