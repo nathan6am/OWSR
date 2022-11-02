@@ -1,5 +1,6 @@
 import React from "react";
 import Modal from "react-modal";
+import { MdClose } from "react-icons/md";
 const customStyles = {
   content: {
     top: "50%",
@@ -14,7 +15,7 @@ const customStyles = {
     display: "flex",
   },
   overlay: {
-    backgroundColor: "rgba(8, 8, 8, 0.2)",
+    backgroundColor: "rgba(8, 8, 8, 0.4)",
   },
 };
 export default function GenericModal({
@@ -23,6 +24,7 @@ export default function GenericModal({
   hide,
   onAfterClose,
   onAfterOpen,
+  closeButtonShown,
 }) {
   return (
     <Modal
@@ -32,7 +34,16 @@ export default function GenericModal({
       isOpen={isOpen}
       ariaHideApp={false}
     >
-      <div className="w-full h-full">{children}</div>
+      {closeButtonShown && (
+        <button
+          onClick={hide}
+          className="absolute top-2 right-2 p-1 rounded-full bg-dark-400 hover:bg-dark-500 z-50"
+        >
+          <MdClose className="text-xl" />
+        </button>
+      )}
+
+      <div className="w-full h-full relative">{children}</div>
     </Modal>
   );
 }

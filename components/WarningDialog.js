@@ -20,10 +20,10 @@ const customDialogStyles = {
   },
 };
 
-export default function CancelDialog({
+export default function WarningDialog({
   isOpen,
-  setIsOpen,
-  onCancel,
+  onDismiss,
+  onConfirm,
   title,
   message,
   confirmMessage,
@@ -38,18 +38,16 @@ export default function CancelDialog({
         <div className="text-dark-100 py-8 px-8">{message}</div>
         <div className="flex flex-row justify-end items-center px-5 bg-dark-900 border-t border-dark-700">
           <button
-            onClick={() => {
-              setIsOpen(false);
-            }}
+            onClick={onDismiss}
             className="px-5 py-3 my-3 mr-3 rounded-md bg-dark-500 hover:bg-dark-600 text-sm"
           >
-            {declineMessage || "No, Continue"}
+            {declineMessage}
           </button>
           <button
-            onClick={onCancel}
+            onClick={onConfirm}
             className=" px-5 py-3 my-3 rounded-md bg-red-500 text-sm hover:bg-red-400"
           >
-            {confirmMessage || "Yes, Cancel"}
+            {confirmMessage}
           </button>
         </div>
       </div>

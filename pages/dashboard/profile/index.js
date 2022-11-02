@@ -4,6 +4,7 @@ import axios from "axios";
 //components
 import Loading from "@/components/Loading";
 import UIButton from "@/components/UI/UIButton";
+import InviteModal from "@/components/InviteModal";
 import {
   MdEmail,
   MdAdd,
@@ -29,6 +30,8 @@ import { useRouter } from "next/router";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
 import { debounce } from "lodash";
 import Link from "next/link";
+import WarningDialog from "@/components/WarningDialog";
+
 function CreateTeamModal({ isOpen, hide, mutate }) {
   const [color, setColor] = useState("#ffffff");
 
@@ -356,9 +359,42 @@ function CreateTeamModal({ isOpen, hide, mutate }) {
   );
 }
 
-function TeamsSection({ teams, showModal, user, router }) {
+function TeamsSection({ teams, showModal, user, router, mutate }) {
+  const [inviteModalShown, setInviteModalShown] = useState(false);
+  const [deleteDialogShown, setDeleteDialogShown] = useState(false);
+  const [activeTeam, setActiveTeam] = useState(null);
+  const deleteTeam = async (teamid) => {
+    const res = await axios.delete(`/api/teams/${teamid}`);
+    console.log(res);
+    mutate();
+  };
+
   return (
     <section className="w-full bd-dark-200 p-8">
+      <InviteModal
+        teamid={activeTeam?._id}
+        isOpen={inviteModalShown && activeTeam}
+        hide={() => {
+          setInviteModalShown(false);
+          setActiveTeam(null);
+        }}
+      />
+      <WarningDialog
+        isOpen={deleteDialogShown}
+        title="Delete Team"
+        message={`Are you sure you want to delete the team ${activeTeam?.name}? This cannot be undone.`}
+        confirmMessage="Yes, Delete"
+        declineMessage="No, Cancel"
+        onDismiss={() => {
+          setDeleteDialogShown(false);
+          setActiveTeam(null);
+        }}
+        onConfirm={() => {
+          deleteTeam(activeTeam._id);
+          setDeleteDialogShown(false);
+          setActiveTeam(null);
+        }}
+      />
       <h2>My Teams</h2>
       {teams ? (
         <>
@@ -367,29 +403,49 @@ function TeamsSection({ teams, showModal, user, router }) {
               return (
                 <div
                   key={team._id}
-                  className="flex flex-row justify-between  px-4 border-b hover:bg-white/[0.2] border-white/[0.3]"
+                  className="flex flex-row justify-between  px-4 border-b hover:bg-white/[0.1] border-white/[0.3] pointer-events-none"
                 >
-                  <Link href={`/dashboard/profile/team/${team._id}`}>
-                    <div className="flex flex-row items-center grow py-4 cursor-pointer">
-                      <TeamColors colors={team.colors} />
-                      <p className="text-lg">{team.name}</p>
-                      {team.owner === user._id && (
-                        <MdAdminPanelSettings className="opacity-40 text-2xl ml-2" />
-                      )}
-                    </div>
-                  </Link>
+                  <div className="flex grow">
+                    <Link href={`/dashboard/profile/team/${team._id}`}>
+                      <div className="flex flex-row items-center py-4 cursor-pointer pointer-events-auto">
+                        <TeamColors colors={team.colors} />
+                        <p className="text-lg hover:underline">{team.name}</p>
+                        {team.owner === user._id && (
+                          <MdAdminPanelSettings className="opacity-40 text-2xl ml-2" />
+                        )}
+                      </div>
+                    </Link>
+                  </div>
 
                   <div className="flex flex-row items-center">
-                    <Popover className="relative">
-                      <Popover.Button className={"flex flex-row items-center"}>
+                    <Popover className="relative pointer-events-auto">
+                      <Popover.Button className={"flex flex-row items-center "}>
                         <MdOutlineMoreVert className="text-2xl" />
                       </Popover.Button>
 
-                      <Popover.Panel className="absolute z-10 translate-y-[-30px] translate-x-[-110px] bg-dark-400">
+                      <Popover.Panel className="absolute z-10 translate-y-[-30px] translate-x-[-160px] bg-dark-400 w-[150px]">
                         <p className="px-4 py-2">Dashboard</p>
-                        <p className="px-4 py-2">Leave</p>
-                        <p className="px-4 py-2">Delete</p>
-                        <p className="px-4 py-2">Dashboard</p>
+                        <button
+                          onClick={() => {
+                            setActiveTeam(team);
+                            setInviteModalShown(true);
+                          }}
+                          className="px-4 py-2 hover:bg-dark-500 w-full text-left"
+                        >
+                          Get Invite Link
+                        </button>
+                        <p className="px-4 py-2">Edit</p>
+                        {team.owner === user._id && (
+                          <button
+                            onClick={() => {
+                              setActiveTeam(team);
+                              setDeleteDialogShown(true);
+                            }}
+                            className="px-4 py-2 hover:bg-red-400 bg-red-500 w-full text-left"
+                          >
+                            Delete
+                          </button>
+                        )}
                       </Popover.Panel>
                     </Popover>
                   </div>
@@ -401,7 +457,12 @@ function TeamsSection({ teams, showModal, user, router }) {
       ) : (
         <p>{`You don't currently belong to any teams`}</p>
       )}
-      <UIButton variant="danger" size="md" className="my-2" onClick={showModal}>
+      <UIButton
+        variant="success"
+        size="md"
+        className="my-2"
+        onClick={showModal}
+      >
         Create a Team <MdAdd className="inline text-xl ml-3" />
       </UIButton>
     </section>
@@ -477,6 +538,7 @@ export default function DriverProfile() {
               teams={user?.teams}
               showModal={showAddTeam}
               user={user}
+              mutate={mutate}
             />
           </main>
         </>
