@@ -382,7 +382,7 @@ function TeamsSection({ teams, showModal, user, router, mutate }) {
       <WarningDialog
         isOpen={deleteDialogShown}
         title="Delete Team"
-        message={`Are you sure you want to delete the team ${activeTeam?.name}? This cannot be undone.`}
+        message={`Are you sure you want to delete the team "${activeTeam?.name}"? This cannot be undone.`}
         confirmMessage="Yes, Delete"
         declineMessage="No, Cancel"
         onDismiss={() => {

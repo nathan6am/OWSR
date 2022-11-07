@@ -30,9 +30,14 @@ export default function InvitePage({ tokenKey, session }) {
       setValidating(true);
     } else {
       if (data && data.success) {
-        setToken(data.data);
-        setIsValid(true);
-        setValidating(false);
+        if (data.data.teamRef) {
+          setToken(data.data);
+          setIsValid(true);
+          setValidating(false);
+        } else {
+          setIsValid(false);
+          setValidating(false);
+        }
       } else {
         setIsValid(false);
         setValidating(false);

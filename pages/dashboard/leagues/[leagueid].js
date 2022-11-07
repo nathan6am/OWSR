@@ -43,20 +43,20 @@ function LeagueTabs() {
         <Tab as={Fragment}>
           {({ selected }) => (
             <button
-              className={`px-4 py-3 w-40 border-b-4 hover:bg-dark-300 hover:text-white ${
+              className={`px-4 py-3 w-40 border-b-4 hover:bg-dark-300 hover:text-white outline-none ${
                 selected
                   ? "text-white  border-red-500"
                   : "text-white/[0.6]  border-transparent"
               }`}
             >
-              Home
+              Info
             </button>
           )}
         </Tab>
         <Tab as={Fragment}>
           {({ selected }) => (
             <button
-              className={`px-4 py-3 w-40 border-b-4 hover:bg-dark-300 hover:text-white ${
+              className={`px-4 py-3 w-40 border-b-4 hover:bg-dark-300 hover:text-white outline-none ${
                 selected
                   ? "text-white  border-red-500"
                   : "text-white/[0.6]  border-transparent"
@@ -69,7 +69,7 @@ function LeagueTabs() {
         <Tab as={Fragment}>
           {({ selected }) => (
             <button
-              className={`px-4 py-3 w-40 border-b-4 hover:bg-dark-300 hover:text-white ${
+              className={`px-4 py-3 w-40 border-b-4 hover:bg-dark-300 hover:text-white outline-none ${
                 selected
                   ? "text-white  border-red-500"
                   : "text-white/[0.6]  border-transparent"
@@ -82,13 +82,13 @@ function LeagueTabs() {
         <Tab as={Fragment}>
           {({ selected }) => (
             <button
-              className={`px-4 py-3 w-40 border-b-4 hover:bg-dark-300 hover:text-white ${
+              className={`px-4 py-3 w-40 border-b-4 hover:bg-dark-300 hover:text-white outline-none ${
                 selected
                   ? "text-white  border-red-500"
                   : "text-white/[0.6]  border-transparent"
               }`}
             >
-              Rules & Info
+              Rules
             </button>
           )}
         </Tab>
