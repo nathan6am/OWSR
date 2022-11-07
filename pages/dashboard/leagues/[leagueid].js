@@ -94,7 +94,11 @@ function LeagueTabs() {
         </Tab>
       </Tab.List>
       <Tab.Panels>
-        <Tab.Panel>Home</Tab.Panel>
+        <Tab.Panel>
+          <div className="py-4 px-4">
+            <h2>Info</h2>
+          </div>
+        </Tab.Panel>
         <Tab.Panel>Schedule</Tab.Panel>
         <Tab.Panel>Results</Tab.Panel>
       </Tab.Panels>
