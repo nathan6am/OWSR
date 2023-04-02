@@ -1,5 +1,6 @@
-import React, { useState } from "react";
-
+import React, { useState, Fragment } from "react";
+import { Tab } from "@headlessui/react";
+import Select from "react-select";
 //icons
 import { IoStar } from "react-icons/io5";
 import { FaTrophy, FaDollarSign } from "react-icons/fa";
@@ -26,15 +27,19 @@ import Loading from "@/components/Loading";
 //util
 import { DateTime } from "luxon";
 import axios from "axios";
+import { useEffect } from "react";
 
 export default function EventDetails({ eventid }) {
   const { data: userData } = useCurrentUser();
   const { data, mutate, error } = useSWR(`/api/events/${eventid}`, fetcher);
   const [cancelDialogOpen, setCancelDialogOpen] = useState(false);
   const [regLoading, setRegLoading] = useState(false);
-  const onRegister = async () => {
+  const onRegister = async (car, skin = "random_skin") => {
     setRegLoading(true);
-    const res = await axios.post(`/api/events/register/${eventid}`);
+    const res = await axios.post(`/api/events/register/${eventid}`, {
+      car: car,
+      skin: skin,
+    });
     if (res?.data?.success) {
       mutate();
 
@@ -56,6 +61,9 @@ export default function EventDetails({ eventid }) {
     setRegLoading(false);
   };
   const event = data?.event;
+  useEffect(() => {
+    console.log(event);
+  }, [event]);
   const registered = data?.event.registeredDrivers.includes(userData?.user._id);
 
   //TODO: improve waitlist logic/UI
@@ -87,17 +95,14 @@ export default function EventDetails({ eventid }) {
                 registered={registered}
                 loading={regLoading}
               />
-              <div className="container py-8 ">
-                <h2 className="text-2xl py-3">Event Info</h2>
-                <div className="grid grid-cols-1  xl:grid-cols-4 gap-4">
-                  <ContentCard cars={event.cars} track={event.track} />
-                  <div className="lg:col-span-2 lg:flex lg:flex-row justify-between">
-                    <DetailsCard details={event.details} />
-                    <WeatherCard weather={event.details.weather} />
-                  </div>
-                </div>
-                <SessionTabs sessions={event.sessions} />
-              </div>
+
+              <EventTabs
+                event={event}
+                onRegister={onRegister}
+                onCancelRegister={() => setCancelDialogOpen(true)}
+                registered={registered}
+                loading={regLoading}
+              />
             </>
           )}
         </>
@@ -117,7 +122,7 @@ EventDetails.getInitialProps = async ({ query }) => {
 EventDetails.layout = "Dashboard";
 
 //Subcomponents for Event Details
-function ContentCard({ cars, track }) {
+function ContentCard({ cars, track, layout }) {
   return (
     <div className="bg-dark-300 lg:col-span-2 overflow-hidden my-4">
       <h2 className="p-4 bg-dark-400 border-b">Content</h2>
@@ -133,7 +138,7 @@ function ContentCard({ cars, track }) {
 
         <div className="mb-4 mx-3">
           <h2 className="py-3">Track:</h2>
-          <RenderTrack track={track} />
+          <RenderTrack track={track} layout={layout} />
         </div>
       </div>
     </div>
@@ -203,60 +208,26 @@ function DetailsCard({ details }) {
 }
 function RenderCar({ car }) {
   return (
-    <div
-      className="w-[240px] h-[140px] bg-cover rounded overflow-hidden border border-white/[0.3] relative"
-      style={{
-        backgroundImage: `url(${car.image})`,
-        backgroundPosition: "center",
-      }}
-    >
-      <p className="p-2 rounded bg-white/[0.1]">{car.name}</p>
-      {car.isMod && (
-        <a
-          target="blank"
-          href={car.link}
-          className="text-red-500 hover:text-red-400 absolute bottom-1 left-2"
-        >
-          <MdDownload className="mb-1 inline" size="25px" />
-          <u>Get mod</u>
-        </a>
-      )}
-      {car.isFree === false && (
-        <FaDollarSign
-          className="absolute top-2.5 right-2 text-red-500"
-          size="20px"
-        />
-      )}
-    </div>
-  );
-}
-
-function RenderTrack({ track }) {
-  return (
-    <div
-      className="w-[230px]  h-[140px] bg-cover rounded overflow-hidden border border-white/[0.3] relative"
-      style={{
-        backgroundImage: `url(${track.image})`,
-        backgroundPosition: "center",
-      }}
-    >
-      <div className="w-full h-full bg-dark-100/[0.5]">
-        <p className="p-2 rounded bg-white/[0.2]">{track.name}</p>
-        <div className="absolute bottom-2 right-2">
-          <p>Turns: {track.corners}</p>
-          <p>{track.length}km</p>
-        </div>
-        {track.isMod && (
+    <div className="flex flex-col w-fit relative my-3">
+      <div
+        className="w-[300px]  h-[160px] bg-cover rounded-t overflow-hidden  bg-white/[0.2] backdrop-blur"
+        style={{
+          backgroundImage: `url(${car.image})`,
+          backgroundPosition: "center",
+        }}
+      >
+        <h2 className="py-2  px-3 bg-white/[0.1]">{car.name}</h2>
+        {car.isMod && (
           <a
             target="blank"
-            href={track.link}
+            href={car.link}
             className="text-red-500 hover:text-red-400 absolute bottom-1 left-2"
           >
             <MdDownload className="mb-1 inline" size="25px" />
             <u>Get mod</u>
           </a>
         )}
-        {track.isFree === false && (
+        {car.isFree === false && (
           <FaDollarSign
             className="absolute top-2.5 right-2 text-red-500"
             size="20px"
@@ -267,8 +238,221 @@ function RenderTrack({ track }) {
   );
 }
 
+function EventTabs({
+  event,
+  onRegister,
+  onCancelRegister,
+  loading,
+  registered,
+}) {
+  const [selectedCar, setSelectedCar] = useState(null);
+  const [selectedSkin, setSelectedSkin] = useState("");
+  return (
+    <Tab.Group>
+      <div className="bg-dark-200 w-full">
+        <div className="container ">
+          <Tab.List>
+            <Tab as={Fragment}>
+              {({ selected }) => (
+                <button
+                  className={`px-4 py-3 w-40 border-b-4 hover:bg-dark-300 hover:text-white outline-none ${
+                    selected
+                      ? "text-white  border-red-500"
+                      : "text-white/[0.6]  border-transparent"
+                  }`}
+                >
+                  Info
+                </button>
+              )}
+            </Tab>
+            <Tab as={Fragment}>
+              {({ selected }) => (
+                <button
+                  className={`px-4 py-3 w-40 border-b-4 hover:bg-dark-300 hover:text-white outline-none ${
+                    selected
+                      ? "text-white  border-red-500"
+                      : "text-white/[0.6]  border-transparent"
+                  }`}
+                >
+                  Rules
+                </button>
+              )}
+            </Tab>
+            <Tab as={Fragment}>
+              {({ selected }) => (
+                <button
+                  className={`px-4 py-3 w-40 border-b-4 hover:bg-dark-300 hover:text-white outline-none ${
+                    selected
+                      ? "text-white  border-red-500"
+                      : "text-white/[0.6]  border-transparent"
+                  }`}
+                >
+                  Entries
+                </button>
+              )}
+            </Tab>
+            <Tab as={Fragment}>
+              {({ selected }) => (
+                <button
+                  className={`px-4 py-3 w-40 border-b-4 hover:bg-dark-300 hover:text-white outline-none ${
+                    selected
+                      ? "text-white  border-red-500"
+                      : "text-white/[0.6]  border-transparent"
+                  }`}
+                >
+                  Registration
+                </button>
+              )}
+            </Tab>
+            <Tab as={Fragment}>
+              {({ selected }) => (
+                <button
+                  className={`px-4 py-3 w-40 border-b-4 hover:bg-dark-300 hover:text-white outline-none ${
+                    selected
+                      ? "text-white  border-red-500"
+                      : "text-white/[0.6]  border-transparent"
+                  }`}
+                >
+                  Results
+                </button>
+              )}
+            </Tab>
+          </Tab.List>
+        </div>
+      </div>
+      <div className="container min-h-screen">
+        <Tab.Panels>
+          <Tab.Panel>
+            <div className="py-4 px-4">
+              <h1>Event Info</h1>
+              <h2 className="text-red-500">Description</h2>
+              <p className="mb-4 md:mb-6">
+                {event.longDescription}Introducing the Open Wheel Sim Racing Fun
+                Race Series, occasional AC events hosted on the Box 5 AC servers
+                with fun car/track combos! The series will start out with fixed
+                setup races using the Praga R1!
+              </p>
+              <div className="grid grid-cols-1 md:grid-cols-3">
+                <div>
+                  <h2 className="text-red-500">Circuit</h2>
+                  <RenderTrack track={event.track} layout={event.layout} />
+                </div>
+                <div className="md:col-span-2">
+                  <h2 className="text-red-500">Cars</h2>
+                  {event.cars.map((car) => {
+                    return <RenderCar key={car._id} car={car} />;
+                  })}
+                </div>
+              </div>
+            </div>
+          </Tab.Panel>
+          <Tab.Panel>Rules</Tab.Panel>
+          <Tab.Panel>Entries</Tab.Panel>
+          <Tab.Panel>
+            <div className="py-4 px-4 mb-20">
+              <h1>Registration</h1>
+              <div className="grid grid-cols-2">
+                <div>
+                  <div className="max-w-[400px] mt-6 mb-12">
+                    <label className="opacity-60 my-4">Select Car</label>
+
+                    <CarSelect
+                      event={event}
+                      onChange={(option) => {
+                        setSelectedCar(option.value);
+                      }}
+                    />
+                  </div>
+                  {selectedCar && (
+                    <div className="max-w-[400px] mt-6 mb-12">
+                      <label className="opacity-60 my-4">Select Livery</label>
+
+                      <SkinSelect
+                        carid={selectedCar}
+                        event={event}
+                        onChange={(option) => {
+                          setSelectedSkin(option.value);
+                        }}
+                      />
+                    </div>
+                  )}
+                </div>
+                <div>
+                  <h2>Preview:</h2>
+                  {selectedCar && selectedSkin && (
+                    <div
+                      className="w-[300px]  h-[200px] bg-cover rounded my-6 overflow-hidden  bg-white/[0.2] backdrop-blur"
+                      style={{
+                        backgroundImage: `url(${selectedSkin.imagePath})`,
+                        backgroundPosition: "center",
+                      }}
+                    ></div>
+                  )}
+                </div>
+              </div>
+              <RegisterButton
+                event={event}
+                onCancelRegister={onCancelRegister}
+                loading={loading}
+                registered={registered}
+                onRegister={() => {
+                  onRegister(selectedCar, selectedSkin.id);
+                }}
+              />
+            </div>
+          </Tab.Panel>
+        </Tab.Panels>
+      </div>
+    </Tab.Group>
+  );
+}
+
+function RenderTrack({ track, layout }) {
+  return (
+    <div className="flex flex-col w-fit relative my-3">
+      <div
+        className="w-[300px]  h-[160px] bg-cover rounded-t overflow-hidden "
+        style={{
+          backgroundImage: `url(${track.image})`,
+          backgroundPosition: "center",
+        }}
+      >
+        <div className="w-full h-full bg-dark-100/[0.5]">
+          <h2 className="p-2 px-3 bg-white/[0.2] backdrop-blur">
+            {track.name} - {layout?.name}
+          </h2>
+
+          {track.isMod && (
+            <a
+              target="blank"
+              href={track?.link}
+              className="text-red-500/[0.7] hover:text-red-400 absolute bottom-1 cursor-pointer right-2"
+            >
+              <MdDownload className="mb-1 inline" size="25px" />
+            </a>
+          )}
+          {track.isFree === false && (
+            <FaDollarSign
+              className="absolute top-2.5 right-2 text-red-500"
+              size="20px"
+            />
+          )}
+        </div>
+      </div>
+      <div className="py-2 px-3 rounded-b bg-dark-300 text-sm text-white/[0.7]">
+        <p>
+          Corners: <span className="text-red-500/[0.7]">{layout?.corners}</span>
+        </p>
+        <p>
+          Length: <span className="text-red-500/[0.7]">{layout?.length}km</span>
+        </p>
+      </div>
+    </div>
+  );
+}
+
 function Header({ event, onRegister, registered, onCancelRegister, loading }) {
-  const dt = new DateTime(event.date);
+  const dt = DateTime.fromISO(event.date);
   return (
     <div
       className=" w-full bg-cover"
@@ -298,28 +482,30 @@ function Header({ event, onRegister, registered, onCancelRegister, loading }) {
               <div className="bg-red-500/[0.7] rounded py-2 px-6 text-white w-fit my-6 ">
                 <Countdown date={event.date} showFull={true} />
               </div>
-
-              <h2 className="my-6  w-fit">
-                Grid Spots Available:{" "}
-                <span
-                  className={`font-bold ${
-                    event.isFull ? "text-red-700" : "text-green-500"
-                  }`}
-                >{`${event.emptySlots}/${event.details.gridSize}`}</span>
-              </h2>
+              <div className="px-4  py-2 bg-white/[0.2] backdrop-blur-sm w-fit rounded-md">
+                {event.isFull ? (
+                  <h2 className="text-red-700 text-xl my-3">
+                    This event is full.
+                  </h2>
+                ) : (
+                  <h2 className="text-green-600 text-xl my-3">
+                    Registration is open!
+                  </h2>
+                )}
+                <h2 className="my-3  w-fit">
+                  Grid Spots Available:{" "}
+                  <span
+                    className={`font-bold ${
+                      event.isFull ? "text-red-700" : "text-green-500"
+                    }`}
+                  >{`${event.emptySlots}/${event.details.gridSize}`}</span>
+                </h2>
+              </div>
             </div>
             <GameLogo
               className="sm:absolute sm:bottom-2 sm:right-4 my-3"
               width="200"
               game={event.game}
-            />
-
-            <RegisterButton
-              loading={loading}
-              event={event}
-              onRegister={onRegister}
-              onCancelRegister={onCancelRegister}
-              registered={registered}
             />
           </div>
         </div>
@@ -415,4 +601,106 @@ function EventIcon({ eventType }) {
     default:
       return null;
   }
+}
+
+function SkinSelect({ carid, event, ...props }) {
+  const [options, setOptions] = useState([]);
+  useEffect(() => {
+    const apiPath = `http://${event.serverIp}:${event.serverApiPort}`;
+    const fetchSkinOptions = async () => {
+      const res = await axios.get(`${apiPath}/cars/${carid}/skins`);
+      if (!res.data) throw new Error("couldn't get skins");
+      const skins = res.data[carid];
+      setOptions(
+        skins.map((skin) => {
+          return {
+            value: {
+              ...skin,
+              iconPath: `http://${event.serverIp}:8772${skin.iconPath}`,
+              imagePath: `http://${event.serverIp}:8772${skin.imagePath}`,
+            },
+            label: skin.name,
+          };
+        })
+      );
+    };
+    fetchSkinOptions();
+  }, [carid, event]);
+
+  const customStyles = {
+    control: (styles, { isFocused }) => ({
+      ...styles,
+      marginTop: 4,
+      backgroundColor: "#121212",
+      border: "none",
+    }),
+    option: (styles, { isFocused }) => ({
+      ...styles,
+      backgroundColor: isFocused ? "#1f1f1f" : "#121212",
+      color: "white",
+    }),
+    singleValue: (styles, { data }) => ({ ...styles, color: "#FFFFFF" }),
+    menuList: (styles) => ({
+      ...styles,
+      backgroundColor: "#121212",
+    }),
+  };
+  return (
+    <Select
+      {...props}
+      placeholder="Select a livery..."
+      options={options}
+      formatOptionLabel={formatOptionLabel}
+      styles={customStyles}
+    />
+  );
+}
+
+const formatOptionLabel = (props) => {
+  return (
+    <div className="flex flex-row">
+      <img
+        className="mr-5 ml-1"
+        src={props.value.iconPath}
+        width="25px"
+        height="auto"
+      ></img>
+      <div>{props.label}</div>
+    </div>
+  );
+};
+
+function CarSelect({ event, ...props }) {
+  const options = event.cars.map((car) => {
+    return {
+      label: car.name,
+      value: car.inGameId,
+    };
+  });
+  const customStyles = {
+    control: (styles, { isFocused }) => ({
+      ...styles,
+      marginTop: 4,
+      backgroundColor: "#121212",
+      border: "none",
+    }),
+    option: (styles, { isFocused }) => ({
+      ...styles,
+      backgroundColor: isFocused ? "#1f1f1f" : "#121212",
+      color: "white",
+    }),
+    singleValue: (styles, { data }) => ({ ...styles, color: "#FFFFFF" }),
+    menuList: (styles) => ({
+      ...styles,
+      backgroundColor: "#121212",
+    }),
+  };
+  return (
+    <Select
+      placeholder="Select a car..."
+      {...props}
+      options={options}
+      styles={customStyles}
+    />
+  );
 }

@@ -1,0 +1,55 @@
+{
+    "featured": true,
+    "type": "community",
+    "title": "Praga R1 @ Silverstone ",
+    "description": "Praga R1 @ Silverstone ",
+    "date": "2022-12-02T21:00:00.000Z",
+    "game": "assetto-corsa",
+    "slug": "praga-ss",
+    "image": "https://owsr-public-img.s3.amazonaws.com/praga-silverstone.jpg",
+    "headerImage": "https://owsr-public-img.s3.amazonaws.com/praga-silverstone.jpg",
+    "fixedSetup": true,
+    "track": "637fe23e6afbe95a3503c062",
+    "layout": "637fe25af58e44df3a872867",
+    "cars": [
+        "62a15f56aa5085b94d7f6360"
+    ],
+    "serverIp": "15.204.173.92",
+    "registrationType": "driver",
+    "serverEventUUID": "609f0c26-d6d1-4521-a60e-c764229c21d5",
+    "modsRequired": false,
+    "paidContent": false,
+    "details": {
+        "gridSize": 20,
+        "fixedSetup": true,
+        "damage": 0.5,
+        "weather": {
+            "description": "Clear",
+            "temp": 25,
+            "trackTemp": 33,
+            "wind": 2,
+            "windVariance": 1
+        },
+        "trackState": {
+            "starting": 90,
+            "development": "1% every 100L"
+        }
+    },
+    "sessions": [
+        {
+            "sessionType": "practice",
+            "duration": 25
+        },
+        {
+            "sessionType": "qualifying",
+            "duration": 10,
+            "qualiType": "fastest"
+        },
+        {
+            "sessionType": "race",
+            "duration": 10,
+            "durationType": "laps",
+            "pitStopsRequired": 0
+        }
+    ]
+}

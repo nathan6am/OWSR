@@ -1,0 +1,23 @@
+{
+    "name": "Praga R1",
+    "inGameId": "ks_praga_r1",
+    "type": "",
+    "image": "http://15.204.173.92:8772/content/cars/ks_praga_r1/skins/00_praga_cars_racing_blue/preview.jpg",
+    "isMod": false,
+    "isDLC": true,
+    "game": "assetto-corsa",
+    "compounds": [
+        "Slicks Hard(H)",
+        "Slicks Medium(M)",
+        "Slicks Soft(S)"
+    ],
+    "info": {
+        "specs": {
+            "BHP": "210bhp",
+            "Power Ratio": "2.78kg/hp",
+            "Torque": "220Nm",
+            "Weight": "585kg"
+        },
+        "brand": "Praga"
+    }
+}
