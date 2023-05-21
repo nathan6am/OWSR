@@ -1,8 +1,5 @@
 module.exports = {
-  content: [
-    "./pages/**/*.{js,ts,jsx,tsx}",
-    "./components/**/*.{js,ts,jsx,tsx}",
-  ],
+  content: ["./pages/**/*.{js,ts,jsx,tsx}", "./components/**/*.{js,ts,jsx,tsx}"],
   theme: {
     container: {
       center: true,
@@ -28,6 +25,38 @@ module.exports = {
           700: "#9b9b9b",
           800: "#bbbbbb",
           900: "#dedede",
+        },
+        elevation: {
+          100: "#121212",
+          200: "#1e1e1e",
+          300: "#2e2f33",
+          400: "#333438",
+          500: "#3f4046",
+          600: "#46474c",
+        },
+        light: {
+          100: "#4d5156",
+          200: "#7c848d",
+          300: "#868f98",
+          400: "#eaf0f6",
+        },
+        primary: {
+          100: "#ffcbcf",
+          200: "#f89694",
+          300: "#f16c6a",
+          400: "#fb4742",
+          500: "#ff3121",
+          600: "#f22323",
+          700: "#e0121d",
+          800: "#d30015",
+        },
+        success: {
+          100: "#bbedcb",
+          200: "#8ce1a9",
+          300: "#50d585",
+          400: "#00cb69",
+          500: "#00bf51",
+          600: "#00b047",
         },
       },
     },

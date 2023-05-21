@@ -35,8 +35,8 @@ export default function Navbar() {
       <nav
         className={`relative flex min-h-[85px] flex-wrap items-center justify-between px-2 py-5 ${
           navScroll || router.pathname !== "/"
-            ? "bg-dark-100"
-            : "bg-dark-100 lg:bg-transparent"
+            ? "bg-elevation-100"
+            : "bg-elevation-100 lg:bg-transparent"
         } mb-3 transition-all ease-in-out duration-300`}
       >
         <div className="container px-2 xl:px-5">
@@ -71,9 +71,7 @@ export default function Navbar() {
               >
                 <li
                   className={`my-1 ${
-                    router.pathname === "/"
-                      ? "text-red-700 font-lg mx-2 border-bottom"
-                      : "nav-li"
+                    router.pathname === "/" ? "text-red-700 font-lg mx-2 border-bottom" : "nav-li"
                   }`}
                 >
                   <Link href="/">Home</Link>
